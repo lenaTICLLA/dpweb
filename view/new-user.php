@@ -88,7 +88,7 @@
                     <div class="mb-3 row">
                         <label for="correo" class="col-sm-2 col-form-label">Correo :</label>
                         <div class="col-sm-10">
-                            <input type="email" class="form-control" name="correo" required>
+                            <input type="email" class="form-control" name="correo" id="correo" required>
                         </div>
                     </div>
                     <div class="mb-3 row">
