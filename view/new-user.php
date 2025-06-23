@@ -118,7 +118,7 @@
                     <div class="mb-3 row">
                         <label for="direccion" class="col-sm-2 col-form-label">Dirección :</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="direccion" name="direccion" required >
+                            <input type="text" class="form-control" id="direccion" name="direccion" required>
                         </div>
                     </div>
                     <div class="mb-3 row">
@@ -145,4 +145,7 @@
 <script src="<?php echo BASE_URL; ?>view/function/user.js"></script>
 <script src="<?php echo BASE_URL; ?>view/bootstrap/js/bootstrap.bundle.
 min.js"></script>
+
+<!-- sweet alert 2-->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </html>
