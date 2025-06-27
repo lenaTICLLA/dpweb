@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LENA</title>
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>view/bootstrap/css/bootstrap.min.css">
+    <script>
+        const base_url ='<?php echo BASE_URL; ?>';
+    </script>
 </head>
 
 <body>

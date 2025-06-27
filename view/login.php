@@ -7,25 +7,39 @@
     <link rel="stylesheet" href="view/login.css">
 </head>
 <body>
+        <div class="background-container">
+        <div class="background-image"></div>
+        <div class="background-overlay"></div>
+    </div>
+    
     <div class="login-container">
-        <h2>Iniciar Sesión</h2>
-        <form id="login-form">
-            <div class="form-group">
-                <label for="username">Usuario:</label>
-                <input type="text" id="username" name="username" required>
-            </div>
-            <div class="form-group">
-                <label for="password">Contraseña:</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-            <button type="submit" class="login-button">Entrar</button>
-            <div class="options">
-                <a href="#">¿Olvidaste tu contraseña?</a>
-                <span>|</span>
-                <a href="#">Crear una cuenta</a>
-            </div>
-            <div id="error-message" class="error-message hidden"></div>
-        </form>
+        <div class="glass-container">
+            <h2>Login</h2>
+            <form class="login-form">
+                <div class="input-group">
+                    <input type="text" id="username" required>
+                    <label for="username">Username</label>
+                </div>
+                
+                <div class="input-group">
+                    <input type="password" id="password" required>
+                    <label for="password">Password</label>
+                </div>
+                
+                <div class="remember-forgot">
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="remember">
+                        <span class="checkmark"></span>
+                        Remember me
+                    </label>
+                    <a href="#" class="forgot-password">Forgot Password?</a>
+                </div>
+                
+                <button type="submit" class="login-btn">Login</button>
+                
+                <p class="register-link">Don't have an account? <a href="#">Register</a></p>
+            </form>
+        </div>
     </div>
 </body>
 </html>
