@@ -36,14 +36,22 @@ async function registrarUsuario() {
         //capturar campos de formulario (HTML)
         const datos = new FormData(frm_user);
         //enviar datos a controlador
-        let respuesta = await fetch(base_url + 'control/UsuarioController.php?tipo=registrar',{
+        let respuesta = await fetch(base_url + 'control/UsuarioController.php?tipo=registrar', {
             method: 'POST',
             mode: 'cors',
             cache: 'no-cache',
             body: datos
         });
+        let json = await respuesta.json();
+        // VALIDAMOS QUE JSON.STATUS SEA = TRUE 
+        if (json.status) {
+            alert(json.msg);
+            document.getElementById('frm_user').reset();
+        }else{
+            alert(json.msg);
+        }
     } catch (e) {
-        console.log("Error al registrar Usuario:"+e);
+        console.log("Error al registrar Usuario:" + e);
     }
-    
+
 }
