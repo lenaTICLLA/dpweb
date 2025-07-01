@@ -12,7 +12,7 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg">
+   <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">Logo</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -21,7 +21,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active"  href="#">Home</a>
+                        <a class="nav-link active" href="#">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Users</a>
@@ -30,7 +30,10 @@
                         <a class="nav-link" href="#">Products</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="#">Categories</a>
+                        <a class="nav-link" href="#">categoria</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page"  href="#">Categories</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Clients</a>
@@ -43,41 +46,39 @@
                     </li>
 
                 </ul>
-                <form class="d-flex" role="search">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Dropdown
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Action</a></li>
-                                <li><a class="dropdown-item" href="#">Another action</a></li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li><a class="dropdown-item" href="#">Something else here</a></li>
-                            </ul>
-                        </li>
-
-
-                    </ul>
-                </form>
+                 </form>
             </div>
         </div>
     </nav>
-  <form id="frm_categoria" method="POST" autocomplete="off">
-    <div class="form-group">
-        <label for="nombre">Nombre Categoría</label>
-        <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Ej: Electrónica">
-    </div>
-    <div class="form-group">
-        <label for="detalle">Detalle</label>
-        <input type="text" class="form-control" id="detalle" name="detalle" placeholder="Ej: Productos tecnológicos">
-    </div>
-    <div class="form-group text-right mt-3">
-        <button type="submit" class="btn btn-primary">Registrar</button>
-    </div>
-</form>
+ <div class="container-fluid">
+        <div class="card">
+            <h5 class="card-header">Titulo</h5>
+            <form id="frm_categoria" action="" method="">
+                <div class="card-body">
+                    <div class="mb-3 row">
+                        <label for="nombre" class="col-sm-2 col-form-label">Nombre Categoría</label>
+                        <div class="col-sm-10">
+                            <input type="number" class="form-control" name="nombre" id="nombre" required>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label for="detalle" class="col-sm-2 col-form-label">Detalle</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="detalle" id="detalle" required>
+                        </div>
+                    </div>
+                   
+                    <div class="mb-3 row">
+                    
+                        <div>
+                            <button type="sumit" class="btn btn-danger">Registrar</button>
+                            <button type="reset" class="btn btn-primary">Limpiar</button>
+                            <button type="button" class="btn btn-danger">Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
 
 </body>
 <script src="<?php echo BASE_URL; ?>view/function/categoria.js"></script>
