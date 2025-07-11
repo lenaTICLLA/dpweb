@@ -76,7 +76,14 @@ async function iniciar_sesion() {
             cache: 'no-cache',
             body: datos
         });
-        
+        //-------------------
+        let json = await respuesta.json();
+        // VALIDAMOS QUE JSON.STATUS SEA = TRUE 
+        if (json.status) {
+            location.replace(base_url + 'new-user')
+        } else {
+            alert(json.msg);
+        }
     } catch (error) {
         console.log(error);
     }
