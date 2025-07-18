@@ -70,8 +70,8 @@ async function iniciar_sesion() {
     /* PARA CAPTURAR ERRORES*/
     try {
         const datos = new FormData(frm_login);
-        let respuesta = await fetch(base_url+'control/usuarioController.php?tipo=iniciar_sesion', {
-           method: 'POST',
+        let respuesta = await fetch(base_url + 'control/usuarioController.php?tipo=iniciar_sesion', {
+            method: 'POST',
             mode: 'cors',
             cache: 'no-cache',
             body: datos
@@ -87,4 +87,19 @@ async function iniciar_sesion() {
     } catch (error) {
         console.log(error);
     }
+}
+
+async function view_users() {
+    try {
+        let respuesta = await fetch(base_url + 'control/UsuarioController.php?tipo=ver_usuarios', {
+            method: 'POST',
+            mode: 'cors',
+            cache: 'no-cache'
+        });
+    } catch (error) {
+
+    }
+}
+if (document.getElementById('content_users')) {
+    view_users();
 }
