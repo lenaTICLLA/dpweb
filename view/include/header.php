@@ -24,16 +24,13 @@
                         <a class="nav-link active" aria-current="page" href="#">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Users</a>
+                        <a class="nav-link" href="<?=BASE_URL ?>users">Users</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Products</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?php echo BASE_URL; ?>new-categoria">categor ia</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Categories</a>
+                        <a class="nav-link" href="<?=BASE_URL ?>new-categoria">categories</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Clients</a>
@@ -66,5 +63,5 @@
                     </ul>
                 </form>
             </div>
-        </div>
+        </div> 
     </nav>

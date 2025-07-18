@@ -19,7 +19,7 @@ class viewsControl extends viewModel
                 $response = "index.php";
             }
         }else {
-            $response = "login";
+            $response = "login";  
         }
         return $response;
     }
