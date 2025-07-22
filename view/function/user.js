@@ -76,9 +76,7 @@ async function iniciar_sesion() {
             cache: 'no-cache',
             body: datos
         });
-        //-------------------
         let json = await respuesta.json();
-        // VALIDAMOS QUE JSON.STATUS SEA = TRUE 
         if (json.status) {
             location.replace(base_url + 'new-user')
         } else {
@@ -91,60 +89,70 @@ async function iniciar_sesion() {
 
 async function view_users() {
     try {
-        let respuesta = await fetch(base_url + 'control/UsuarioController.php?tipo=ver_usuarios', {
+        const respuesta = await fetch(base_url + 'control/UsuarioController.php?tipo=ver_usuarios', {
             method: 'POST',
             mode: 'cors',
             cache: 'no-cache'
         });
 
-        let usuarios = await respuesta.json();  // <-- Aquí se recibe el array de usuarios
-        let tbody = document.getElementById('content_users');
-        tbody.innerHTML = ''; // Limpia contenido previo
+        const usuarios = await respuesta.json(); // Array de usuarios
+        const tbody = document.getElementById('content_users');
+        tbody.innerHTML = ''; // Limpia contenido anterior
 
         const rolesMap = {
             '1': 'Administrador',
-            '2': 'Usuario',
-            '3': 'Contador',
-            '4': 'Almacenero'
+            '2': 'Vendedor'
         };
 
         usuarios.forEach((usuario, index) => {
-            let fila = document.createElement('tr');
+            const fila = document.createElement('tr');
             fila.classList.add('text-center');
 
-            let celdaNro = document.createElement('td');
+            const celdaNro = document.createElement('td');
             celdaNro.textContent = index + 1;
 
-            let celdaDNI = document.createElement('td');
+            const celdaDNI = document.createElement('td');
             celdaDNI.textContent = usuario.nro_identidad;
 
-            let celdaNombre = document.createElement('td');
+            const celdaNombre = document.createElement('td');
             celdaNombre.textContent = usuario.razon_social;
 
-            let celdaCorreo = document.createElement('td');
+            const celdaCorreo = document.createElement('td');
             celdaCorreo.textContent = usuario.correo;
 
-            let celdaRol = document.createElement('td');
-            celdaRol.textContent = rolesMap[usuario.rol] || 'Desconocido';
+            const celdaRol = document.createElement('td');
+            celdaRol.textContent = rolesMap[String(usuario.rol)] || 'Desconocido';
 
-            let celdaEstado = document.createElement('td');
+            const celdaEstado = document.createElement('td');
             celdaEstado.textContent = usuario.estado || 'Activo';
 
-            // Agrega todas las celdas a la fila
+            const celdaAcciones = document.createElement('td');
+            const btnEditar = document.createElement('a');
+            btnEditar.textContent = 'Editar';
+            btnEditar.className = 'btn btn-sm btn-primary';
+            btnEditar.setAttribute('href', base_url+'edit_user/'+usuario.id);
+            btnEditar.setAttribute('data-bs-target', '#modalEditarUsuario');
+            btnEditar.addEventListener('click', () => {
+                cargarDatosEnModal(usuario); 
+            });
+
+            celdaAcciones.appendChild(btnEditar);
+
+            
             fila.appendChild(celdaNro);
             fila.appendChild(celdaDNI);
             fila.appendChild(celdaNombre);
             fila.appendChild(celdaCorreo);
             fila.appendChild(celdaRol);
             fila.appendChild(celdaEstado);
+            fila.appendChild(celdaAcciones); 
 
-            // Agrega la fila al tbody
-            tbody.appendChild(fila);
+            tbody.appendChild(fila); 
         });
 
     } catch (error) {
         console.error("Error al obtener usuarios:", error);
-        Swal.fire({
+        Swal.fire({  
             icon: "error",
             title: "Error",
             text: "No se pudieron cargar los usuarios."
@@ -155,10 +163,3 @@ async function view_users() {
 if (document.getElementById('content_users')) {
     view_users();
 }
-<<<<<<< HEAD
-
-
-
-
-=======
->>>>>>> b99c3e1918dbfedb6f82dc12ec451360a721fe1b
