@@ -96,14 +96,69 @@ async function view_users() {
             mode: 'cors',
             cache: 'no-cache'
         });
-    } catch (error) {
 
+        let usuarios = await respuesta.json();  // <-- Aquí se recibe el array de usuarios
+        let tbody = document.getElementById('content_users');
+        tbody.innerHTML = ''; // Limpia contenido previo
+
+        const rolesMap = {
+            '1': 'Administrador',
+            '2': 'Usuario',
+            '3': 'Contador',
+            '4': 'Almacenero'
+        };
+
+        usuarios.forEach((usuario, index) => {
+            let fila = document.createElement('tr');
+            fila.classList.add('text-center');
+
+            let celdaNro = document.createElement('td');
+            celdaNro.textContent = index + 1;
+
+            let celdaDNI = document.createElement('td');
+            celdaDNI.textContent = usuario.nro_identidad;
+
+            let celdaNombre = document.createElement('td');
+            celdaNombre.textContent = usuario.razon_social;
+
+            let celdaCorreo = document.createElement('td');
+            celdaCorreo.textContent = usuario.correo;
+
+            let celdaRol = document.createElement('td');
+            celdaRol.textContent = rolesMap[usuario.rol] || 'Desconocido';
+
+            let celdaEstado = document.createElement('td');
+            celdaEstado.textContent = usuario.estado || 'Activo';
+
+            // Agrega todas las celdas a la fila
+            fila.appendChild(celdaNro);
+            fila.appendChild(celdaDNI);
+            fila.appendChild(celdaNombre);
+            fila.appendChild(celdaCorreo);
+            fila.appendChild(celdaRol);
+            fila.appendChild(celdaEstado);
+
+            // Agrega la fila al tbody
+            tbody.appendChild(fila);
+        });
+
+    } catch (error) {
+        console.error("Error al obtener usuarios:", error);
+        Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: "No se pudieron cargar los usuarios."
+        });
     }
 }
+
 if (document.getElementById('content_users')) {
     view_users();
 }
+<<<<<<< HEAD
 
 
 
 
+=======
+>>>>>>> b99c3e1918dbfedb6f82dc12ec451360a721fe1b
