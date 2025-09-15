@@ -24,19 +24,22 @@
                         <a class="nav-link active" aria-current="page" href="#">Home</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="<?= BASE_URL ?>new-user">New-user</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="<?= BASE_URL ?>users">Users</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= BASE_URL ?>products">Products</a>
+                        <a class="nav-link" href="<?= BASE_URL ?>products">New-product</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= BASE_URL ?>producto">productos</a>
+                        <a class="nav-link" href="<?= BASE_URL ?>producto">Products</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= BASE_URL ?>new-categoria">categories</a>
+                        <a class="nav-link" href="<?= BASE_URL ?>new-categoria">New-categorie</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= BASE_URL ?>categories">categorias</a>
+                        <a class="nav-link" href="<?= BASE_URL ?>categories">Categories</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Clients</a>

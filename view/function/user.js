@@ -49,10 +49,18 @@ async function registrarUsuario() {
         let json = await respuesta.json();
         //validamos que json.status sea = true
         if (json.status) {
-            alert(json.msg);
+            Swal.fire({
+                title: json.msg,
+                icon: "success",
+                draggable: true
+            });
             document.getElementById('frm_user').reset(); // Limpia el formulario
         } else {
-            alert(json.msg);
+            Swal.fire({
+                title: json.msg,
+                icon: "error",
+                draggable: false
+            });
         }
     } catch (e) {
         console.log("Error al registrar Usuario:" + e);
