@@ -71,9 +71,9 @@
                             </select>
                         </div>
                         <div>
-                            <button type="sumit" class="btn btn-danger">Registrar</button>
-                            <button type="reset" class="btn btn-primary">Limpiar</button>
-                            <button type="button" class="btn btn-danger">Cancelar</button>
+                            <button type="sumit" class="btn btn-outline-primary">Registrar</button>
+                            <button type="reset" class="btn btn-outline-success">Limpiar</button>
+                            <button type="button" class="btn btn-outline-danger">Cancelar</button>
                         </div>
                     </div>
                 </div>
