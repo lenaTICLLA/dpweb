@@ -18,7 +18,7 @@
 
                     </div>
                 </div>
-                 <div class="mb-3 row">
+                <div class="mb-3 row">
                     <label for="detalle" class="col-sm-4 col-form-label">Detalle:</label>
                     <div class="col-sm-8">
                         <input type="text" class="form-control" id="detalle" name="detalle" required>
@@ -48,6 +48,15 @@
                         <input type="file" class="form-control" id="imagen" name="imagen" accept="image/*" required>
                     </div>
                 </div>
+                 <div class="mb-3 row">
+                    <label for="id_categoria" class="col-sm-4 col-form-label">Categoría:</label>
+                    <div class="col-sm-8">
+                        <select class="form-control" id="id_categoria" name="id_categoria" required>
+                            <option value="">Seleccione una categoría</option>
+                            <!-- Las opciones se cargarán dinámicamente con JavaScript -->
+                        </select>
+                    </div>
+                </div>
                 <div class="d-flex justify-content-end gap-2">
                     <button type="button" class="btn btn-primary" id="btn_guardar">Actualizar</button>
                     <a href="<?= BASE_URL ?>produc" type="button" class="btn btn-danger">Cancelar</a>
@@ -64,6 +73,7 @@
     document.addEventListener('DOMContentLoaded', () => {
         let partes = window.location.pathname.split('/');
         let id = partes[partes.length - 1];
+        cargarCategorias(); // Cargar categorías primero
 
         if (!isNaN(id)) {
             obtenerProductoPorId(id); // Cargar los datos si estamos editando

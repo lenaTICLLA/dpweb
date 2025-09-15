@@ -7,7 +7,7 @@
                     <div class="mb-3 row">
                         <label for="nombre" class="col-sm-2 col-form-label">Nombre Categoría</label>
                         <div class="col-sm-10">
-                            <input type="number" class="form-control" name="nombre" id="nombre" required>
+                            <input type="text" class="form-control" name="nombre" id="nombre" required>
                         </div>
                     </div>
                     <div class="mb-3 row">
