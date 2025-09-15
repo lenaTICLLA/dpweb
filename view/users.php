@@ -1,9 +1,9 @@
 
 <div class="container">
     <h4 class="mt-3 mb-3">Lista de Usuarios</h4>
-<table class="table table-dark table-striped table-striped">
-    <thead>
-        <tr>
+<table class="table table-bordered  table-danger">
+    <thead class="table-dark">
+        <tr class="text-center">
             <th>Nro</th>
             <th>DNI</th>
             <th>Nombres y Apellidos</th>
@@ -19,4 +19,4 @@
 </table>
 </div>
 <script src="<?= BASE_URL ?>view/function/user.js"></script>
-   
+    

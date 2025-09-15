@@ -7,7 +7,7 @@
     <title>LENA</title>
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>view/bootstrap/css/bootstrap.min.css">
     <script>
-        const base_url ='<?php echo BASE_URL; ?>';
+        const base_url = '<?php echo BASE_URL; ?>';
     </script>
 </head>
 
@@ -24,13 +24,19 @@
                         <a class="nav-link active" aria-current="page" href="#">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?=BASE_URL ?>users">Users</a>
+                        <a class="nav-link" href="<?= BASE_URL ?>users">Users</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Products</a>
+                        <a class="nav-link" href="<?= BASE_URL ?>products">Products</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?=BASE_URL ?>new-categoria">categories</a>
+                        <a class="nav-link" href="<?= BASE_URL ?>producto">productos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= BASE_URL ?>new-categoria">categories</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= BASE_URL ?>categories">categorias</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Clients</a>
@@ -63,5 +69,5 @@
                     </ul>
                 </form>
             </div>
-        </div> 
+        </div>
     </nav>

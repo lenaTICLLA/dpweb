@@ -46,16 +46,6 @@
                 <button onclick="history.back()" class="btn-secondary">
                     <span>←</span> Página Anterior
                 </button>
-                <button onclick="window.location.href='/'" class="btn-primary">
-                    <span>🏠</span> Ir al Inicio
-                </button>
-            </div>
-
-            <div class="search-container">
-                <input type="text" placeholder="Buscar en el sitio..." class="search-input">
-                <button class="search-btn">
-                    <span>🔍</span>
-                </button>
             </div>
         </div>
     </div>
