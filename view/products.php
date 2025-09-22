@@ -2,7 +2,7 @@
 <div class="container-fluid mt-4">
     <div class="card">
         <h5 class="card-header">Registrar Producto</h5>
-        <form id="frm_produc">
+        <form id="frm_produc" action="" method="multipart/form-data">
             <div class="card-body">
                 <div class="mb-3 row">
                     <label for="codigo" class="col-sm-4 col-form-label">Codigo:</label>
@@ -52,6 +52,15 @@
                     <div class="col-sm-8">
                         <select class="form-control" id="id_categoria" name="id_categoria" required>
                             <option value="">Seleccione una categoría</option>
+                            <!-- Las opciones se cargarán dinámicamente con JavaScript -->
+                        </select>
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label for="id_proveedor" class="col-sm-4 col-form-label">Proveedor:</label>
+                    <div class="col-sm-8">
+                        <select class="form-control" id="id_proveedor" name="id_proveedor" required>
+                            <option value="">Selecciononar proveedor</option>
                             <!-- Las opciones se cargarán dinámicamente con JavaScript -->
                         </select>
                     </div>

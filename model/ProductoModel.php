@@ -1,16 +1,28 @@
 <?php
+// Se incluye el archivo de conexión para poder interactuar con la base de datos
 require_once("../library/conexion.php");
 
+// Clase con todas las funciones relacionadas con la tabla producto 
 class ProductoModel
 {
+    // Atributo privado para almacenar la conexión con la base de datos
     private $conexion;
 
     function __construct()
     {
+        // Se crea una nueva instancia de la clase Conexion
         $this->conexion = new Conexion();
         $this->conexion = $this->conexion->connect();
     }
 
+      public function existeCodigo($codigo)
+    {
+        $codigo = $this->conexion->real_escape_string($codigo);
+        $consulta = "SELECT id FROM producto WHERE codigo='$codigo' LIMIT 1";
+        $sql = $this->conexion->query($consulta);
+        return $sql->num_rows;
+    }
+//
     public function registrar($codigo, $nombre, $detalle, $precio, $stock, $fecha_vencimiento, $imagen, $id_categoria = NULL, $id_proveedor = NULL)
     {
         $stmt = $this->conexion->prepare("INSERT INTO producto (codigo, nombre, detalle, precio, stock, fecha_vencimiento, imagen, id_categoria, id_proveedor) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
@@ -20,7 +32,7 @@ class ProductoModel
         $stmt->close();
         return $id;
     }
-
+//
     public function existeProducto($nombre)
     {
         $stmt = $this->conexion->prepare("SELECT * FROM producto WHERE nombre = ?");
@@ -30,16 +42,18 @@ class ProductoModel
         return $sql->num_rows;
     }
 
-    public function verProductos()
-    {
-        $arr_productos = array();
-        $consulta = "SELECT * FROM producto";
-        $sql = $this->conexion->query($consulta);
-        while ($objeto = $sql->fetch_object()) {
-            array_push($arr_productos, $objeto);
-        }
-        return $arr_productos;
+   public function verProductos()
+{
+    $arr_productos = array();
+    $consulta = "SELECT p.*, c.nombre AS categoria 
+                 FROM producto p 
+                 LEFT JOIN categoria c ON p.id_categoria = c.id";
+    $sql = $this->conexion->query($consulta);
+    while ($objeto = $sql->fetch_object()) {
+        array_push($arr_productos, $objeto);
     }
+    return $arr_productos;
+}
 
 
 
@@ -97,6 +111,7 @@ class ProductoModel
         error_log("Consulta ejecutada con éxito");
     }
 
+    // Depuración después de la consulta
     $stmt->close();
     return $resultado;
 }

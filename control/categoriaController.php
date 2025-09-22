@@ -29,9 +29,9 @@ if ($tipo == 'registrar') {
 //
 
 if ($tipo == "ver_categorias") {
-    $categorias = $objCategoria->verCategorias();
+    $categorias = $objCategoria->verCategorias(); // Método que devuelve todas las categorías
     header('Content-Type: application/json');
-    echo json_encode($categorias, JSON_UNESCAPED_UNICODE);
+    echo json_encode($categorias);
     exit;
 }
 
@@ -41,6 +41,20 @@ if ($tipo == "obtener_categoria") {
     $modelo = new CategoriaModel();
     $categoria = $modelo->obtenerCategoriaPorId($id);
     echo json_encode($categoria);
+    exit;
+}
+if ($tipo == 'obtener_producto') {
+    header('Content-Type: application/json');
+    $id = $_GET['id'];
+
+    require_once '../model/ProductoModel.php';
+    $modelo = new ProductoModel();
+    $producto = $modelo->obtenerProductoPorId($id);
+
+    // Depuración: Imprimir el producto antes de enviarlo
+    error_log("Producto enviado por controlador: " . print_r($producto, true));
+    
+    echo json_encode($producto);
     exit;
 }
 
