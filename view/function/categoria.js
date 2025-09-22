@@ -66,6 +66,7 @@ async function actualizarCategoria() {
         if (json.status) {
             Swal.fire("¡Éxito!", json.msg, "success");
             location.href = base_url + 'categories';
+
         } else {
             Swal.fire("¡Error!", json.msg, "error");
         }

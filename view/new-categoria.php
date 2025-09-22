@@ -2,7 +2,7 @@
  <div class="container-fluid">
         <div class="card">
             <h5 class="card-header">Registrar Categoria</h5>
-            <form id="frm_categoria" action="" method="">
+            <form id="frm_categories" action="" method="">
                 <div class="card-body">
                     <div class="mb-3 row">
                         <label for="nombre" class="col-sm-2 col-form-label">Nombre Categoría</label>
@@ -28,6 +28,6 @@
                 </div>
             </form>
         </div>
-
+ <script src="<?php echo BASE_URL; ?>view/function/categoria.js"></script>
 
         

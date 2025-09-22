@@ -12,6 +12,7 @@
             <th>Stock</th>
             <th>Fecha Vencimiento</th>
             <th>Imagen</th>
+            <th>Categoria</th>
             <th>Acciones</th>
         </tr>
     </thead>
