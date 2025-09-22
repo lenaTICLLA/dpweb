@@ -184,7 +184,7 @@ async function actualizarProducto() {
                 icon: "success",
                 draggable: true
             });
-            location.href = base_url + 'produc';  // Redirige si deseas
+            location.href = base_url + 'products';  // Redirige si deseas
             view_productos();
         } else {
             Swal.fire({
