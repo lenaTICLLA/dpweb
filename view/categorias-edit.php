@@ -1,11 +1,16 @@
-
-    <!-- inicio de cuerpo de pagina -->
-    <div class="container" style="margin-top: 100px;">
+<div class="container" style="margin-top: 100px;">
         <div class="card">
             <div class="card-header" style="text-align:center;">
-                Registrar Categoria
+                Editar Categoria
+                <?php
+                if (isset($_GET["views"])) {
+                    $ruta = explode("/", $_GET["views"]);
+                    echo $ruta[1];
+                }
+                ?>
             </div>
-            <form id="frm_categorie" action="" method="">
+            <form id="frm_edit_categorie" action="" method="">
+                <input type="hidden" name="id_categoria" id="id_categoria" value="<?= $ruta[1]; ?>">
                 <div class="card-body">
 
                     <div class="mb-3 row">
@@ -22,16 +27,15 @@
                     </div>
 
                     <div style="display: flex; justify-content:center; gap:20px">
-                        <button type="submit" class="btn btn-primary">Registrar</button>
-                        <button type="reset" class="btn btn-info">Limpiar</button>
-                        <button type="button" class="btn btn-danger">Cancelar</button>
-                        <a href="<?php echo BASE_URL; ?>categorias-lista" class="btn btn-success">ver</a>
+                        <button type="submit" class="btn btn-primary">Actualizar</button>
+                        <a href="<?php echo BASE_URL; ?>categorias-lista" class="btn btn-secondary">Cancelar</a>
                     </div>
                 </div>
             </form>
         </div>
     </div>
-    <!-- fin de cuerpo de pagina -->
-    <script src="<?php echo BASE_URL; ?>view/function/categoria.js"></script>
 
-    
+<script src="<?php echo BASE_URL; ?>view/function/categoria.js"></script>
+<script>
+    edit_categoria();
+</script>

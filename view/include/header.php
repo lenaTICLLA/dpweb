@@ -30,17 +30,16 @@
                         <a class="nav-link" href="<?= BASE_URL ?>users">Users</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= BASE_URL ?>products">New-product</a>
+                        <a class="nav-link" href="<?= BASE_URL ?>new-producto">Nuevo Producto</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= BASE_URL ?>producto">Products</a>
+                        <a class="nav-link" href="<?= BASE_URL ?>productos-lista">Lista de Productos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= BASE_URL ?>new-categoria">New-categorie</a>
+                        <a class="nav-link" href="<?= BASE_URL ?>new-categoria">Nueva Categoria</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= BASE_URL ?>categories">Categories</a>
-                    </li>
+                        <a class="nav-link" href="<?= BASE_URL ?>categorias-lista">Lista de Categorias</a>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Clients</a>
                     </li>
@@ -56,15 +55,15 @@
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Dropdown
+                                Menu
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Action</a></li>
-                                <li><a class="dropdown-item" href="#">Another action</a></li>
+                                <li><a class="dropdown-item" href="#">Perfil</a></li>
+                                <li><a class="dropdown-item" href="#">Ajustes</a></li>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
-                                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                <li><a class="dropdown-item" href="#">cerrar sesión</a></li>
                             </ul>
                         </li>
 
@@ -73,4 +72,4 @@
                 </form>
             </div>
         </div>
-    </nav>
+    </nav> 

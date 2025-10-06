@@ -64,13 +64,49 @@ class UsuarioModel
         return $resultado->fetch_assoc();
     }
 
-    public function buscarPorDocumento($nro_identidad)
-    {
-        $stmt = $this->conexion->prepare("SELECT id FROM persona WHERE nro_identidad = ?");
-        $stmt->bind_param("s", $nro_identidad);
+    public function mostrarProveedores(){
+        $arr_proveedores = array();
+        $consulta = "SELECT * FROM persona WHERE rol = 'proveedor'";
+        $sql = $this->conexion->query($consulta);
+
+        if (!$sql) {
+            error_log("Error en query(): " . $this->conexion->error);
+            return $arr_proveedores;
+        }
+        while ($objeto = $sql->fetch_object()){
+            array_push($arr_proveedores, $objeto);
+        }
+        return $arr_proveedores;
+    }
+
+    public function existeCorreoEnOtroUsuario($correo, $excluirId) {
+        $consulta = "SELECT id FROM persona WHERE correo = ? AND id != ? LIMIT 1";
+        $stmt = $this->conexion->prepare($consulta);
+        if (!$stmt) {
+            error_log("Error en prepare(): " . $this->conexion->error);
+            return false;
+        }
+        $stmt->bind_param("si", $correo, $excluirId);
         $stmt->execute();
         $resultado = $stmt->get_result();
-        return $resultado->fetch_assoc();
+        $existe = $resultado->num_rows > 0;
+        $stmt->close();
+        return $existe;
+    }
+
+    public function existeIdentidadEnOtroUsuario($nro_identidad, $excluirId) {
+        $consulta = "SELECT id FROM persona WHERE nro_identidad = ? AND id != ? LIMIT 1";
+        $stmt = $this->conexion->prepare($consulta);
+        if (!$stmt) {
+            error_log("Error en prepare(): " . $this->conexion->error);
+            return false;
+        }
+        $stmt->bind_param("si", $nro_identidad, $excluirId);
+        $stmt->execute();
+        $resultado = $stmt->get_result();
+        $existe = $resultado->num_rows > 0;
+        $stmt->close();
+        return $existe;
     }
 
     public function actualizarPersona($data)
