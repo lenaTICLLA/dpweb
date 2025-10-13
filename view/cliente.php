@@ -1,9 +1,9 @@
 <div class="container container-glass">
   <div class="d-flex justify-content-between align-items-center mb-4 arriba">
-    <h3 class="title">👤 Lista de Usuarios</h3>
+    <h3 class="title">👥 Lista de Clientes</h3>
     <div>
-      <a href="<?php echo BASE_URL; ?>new-user" class="btn btn-primary me-2">➕ Nuevo Usuario</a>
-      <a href="<?php echo BASE_URL; ?>cliente" class="btn btn-secondary me-2">👥 Clientes</a>
+      <a href="<?php echo BASE_URL; ?>new-cliente" class="btn btn-primary me-2">➕ Nuevo Cliente</a>
+      <a href="<?php echo BASE_URL; ?>users" class="btn btn-secondary me-2">👤 Usuarios</a>
       <a href="<?php echo BASE_URL; ?>proveedor" class="btn btn-secondary">🏭 Proveedores</a>
     </div>
   </div>
@@ -16,24 +16,23 @@
           <th>DNI</th>
           <th>Nombres y Apellidos</th>
           <th>Correo</th>
-          <th>Rol</th>
-          <th>Estado</th>
+          <th>Dirección</th>
+          <th>Teléfono</th>
           <th>Acciones</th>
         </tr>
       </thead>
-      <tbody id="content_user">
-        <!-- Aquí se cargan los usuarios -->
+      <tbody id="content_clientes">
+        <!-- Aquí se cargan los clientes -->
       </tbody>
     </table>
   </div>
 </div>
 
-<!-- Tu archivo JS -->
+<!-- Archivo JS -->
 <script src="<?php echo BASE_URL; ?>view/funtion/user.js"></script>
 
-<!-- 🔮 ESTILO DIRECTAMENTE AQUÍ -->
+<!-- ======== ESTILO GLASS ======== -->
 <style>
-/* ======== ESTILO GLOBAL ======== */
 body {
   background: linear-gradient(135deg, #5c0029, #9b3b61, #f5a3c7);
   background-attachment: fixed;
@@ -44,7 +43,6 @@ body {
   padding: 0;
 }
 
-/* ======== CONTENEDOR “GLASS” ======== */
 .container-glass {
   background: rgba(255, 255, 255, 0.12);
   backdrop-filter: blur(12px);
@@ -55,21 +53,18 @@ body {
   animation: fadeIn 1s ease forwards;
 }
 
-/* ======== TÍTULO ======== */
 .title {
   color: #fff;
   font-weight: 600;
   letter-spacing: 1px;
 }
 
-/* ======== BOTONES ======== */
 .btn-primary {
   background-color: #c72b6c !important;
   border-color: #c72b6c !important;
   border-radius: 10px;
   transition: 0.3s;
 }
-
 .btn-primary:hover {
   background-color: #a51d58 !important;
   transform: scale(1.05);
@@ -82,13 +77,11 @@ body {
   border-radius: 10px;
   transition: 0.3s;
 }
-
 .btn-secondary:hover {
   background-color: #f28da7 !important;
   transform: scale(1.05);
 }
 
-/* ======== TABLA ======== */
 .table {
   color: #fff;
   background: rgba(255, 255, 255, 0.08);
@@ -99,60 +92,39 @@ body {
 .table thead {
   background-color: rgba(255, 255, 255, 0.2);
 }
-
 .table th {
   color: #fff;
   font-weight: 600;
 }
-
 .table tbody tr:hover {
   background-color: rgba(255, 255, 255, 0.15);
   transition: 0.3s;
 }
 
-/* ======== ANIMACIÓN ======== */
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-/* ======== ENCABEZADO ======== */
-.arriba h3 {
-  margin: 0;
-}
+.arriba h3 { margin: 0; }
+.arriba a { text-decoration: none; }
+.arriba .btn { font-weight: 500; }
 
-.arriba a {
-  text-decoration: none;
-}
-
-.arriba .btn {
-  font-weight: 500;
-}
-
-/* ======== SCROLL ======== */
 .table-responsive {
   max-height: 480px;
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: #c72b6c rgba(255, 255, 255, 0.1);
 }
-
 .table-responsive::-webkit-scrollbar {
   width: 8px;
 }
-
 .table-responsive::-webkit-scrollbar-thumb {
   background-color: #c72b6c;
   border-radius: 4px;
 }
 </style>
 
-<!-- Bootstrap CDN -->
+<!-- Bootstrap -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

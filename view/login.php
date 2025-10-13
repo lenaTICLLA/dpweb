@@ -38,13 +38,15 @@
                     <a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a>
                 </div>
                 
-                <button type="button" class="login-btn" onclick="iniciar_sesion();">Ingresar</button>
+            <button type="submit" class="login-btn">Ingresar</button>
                 
                 <p class="register-link">¿No tienes una cuenta? <a href="#">Regístrate</a></p>
             </form>
         </div>
     </div>
-    <script src="<?= BASE_URL; ?>view/function/user.js"></script>
+    <script src="<?= BASE_URL; ?>view/funtion/user.js"></script>
+    <script src="<?= BASE_URL; ?>view/funtion/sesion.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 </html>

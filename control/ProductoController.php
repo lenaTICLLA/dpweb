@@ -1,37 +1,52 @@
 <?php
-require_once("../model/ProductsModel.php");
+require_once("../model/ProductoModel.php");
 require_once("../model/CategoriaModel.php");
-require_once("../model/UsuarioModel.php");
 
-
-$objProducto = new ProductsModel();
+$objProducto = new ProductoModel();
 $objCategoria = new CategoriaModel();
-$objPersona = new UsuarioModel();
+
 $tipo = $_GET['tipo'];
 
-if ($tipo == 'registrar') {
-    // Captura los campos del formulario
-    $codigo = $_POST['codigo'] ?? '';
-    $nombre = $_POST['nombre'] ?? '';
-    $detalle = $_POST['detalle'] ?? '';
-    $precio = $_POST['precio'] ?? '';
-    $stock = $_POST['stock'] ?? '';
-    $id_categoria = $_POST['id_categoria'] ?? '';
-    $fecha_vencimiento = $_POST['fecha_vencimiento'] ?? '';
-    $id_proveedor = $_POST['id_proveedor'] ?? '';
+if ($tipo == "registrar") {
+    //print_r($_POST);
+    $codigo =  $_POST['codigo'];
+    $nombre =  $_POST['nombre'];
+    $detalle =  $_POST['detalle'];
+    $precio =  $_POST['precio'];
+    $stock =  $_POST['stock'];
+    $id_categoria =  $_POST['id_categoria'];
+    $fecha_vencimiento =  $_POST['fecha_vencimiento'];
+    //$imagen =  $_POST['imagen'];
+    $id_proveedor =  $_POST['id_proveedor'];
 
-    // Validar campos obligatorios (excluyendo id_proveedor)
-    if ($codigo == "" || $nombre == "" || $detalle == "" || $precio == "" || $stock == "" || $id_categoria == "" || $fecha_vencimiento == "" || $id_proveedor == "") {
-        $arrResponse = array('status' => false, 'msg' => 'Error, campos vacíos');
-        echo json_encode($arrResponse);
-        exit;
+    /*
+    // validar que los campos no esten vacios
+    if ($codigo == "" || $nombre == "" || $detalle == "" || $precio == "" || $stock == "" || $id_categoria == "" || $fecha_vencimiento == "" || $imagen == "" || $id_proveedor == "") {
+
+        $arrResponse = array('status' => false, 'msg' => 'Error, campos vacios');
+    }else {
+        // validar si existe producto con el mismo 
+        $existeProducto = $objProducto->existeProducto($codigo);
+        if ($existeProducto > 0) {
+            $arrResponse = array('status' => false, 'msg' => 'Error: codigo ya existe');
+        } else {
+            $respuesta = $objProducto->registrar($codigo, $nombre, $detalle, $precio, $stock, $id_categoria, $fecha_vencimiento, $imagen, $id_proveedor);
+            if ($respuesta) {
+                $arrResponse = array('status' => true, 'msg' => 'REGISTRADO CORRECTAMENTE');
+            } else {
+                $arrResponse = array('status' => false, 'msg' => 'ERROR: FALLO AL REGISTAR');
+            }
+        }
     }
-
+    echo json_encode($arrResponse);
+    */
+    
+    
     if (!isset($_FILES['imagen']) || $_FILES['imagen']['error'] !== UPLOAD_ERR_OK) {
         echo json_encode(['status' => false, 'msg' => 'Error, imagen no recibida']);
         exit;
     }
-    if ($objProducto->existeCodigo($codigo) > 0) {
+    if ($objProducto->existeProducto($codigo) > 0) {
         echo json_encode(['status' => false, 'msg' => 'Error, el código ya existe']);
         exit;
     }
@@ -60,7 +75,7 @@ if ($tipo == 'registrar') {
         echo json_encode(['status' => false, 'msg' => 'No se pudo guardar la imagen']);
         exit;
     }
-    $id = $objProducto->registrar($codigo, $nombre, $detalle, $precio, $stock, $id_categoria, $fecha_vencimiento, $rutaRelativa, $id_proveedor);
+    $id = $objProducto->registrar($codigo,$nombre,$detalle,$precio,$stock,$id_categoria,$fecha_vencimiento,$rutaRelativa, $id_proveedor);
     if ($id > 0) {
         echo json_encode(['status' => true, 'msg' => 'Registrado correctamente', 'id' => $id, 'img' => $rutaRelativa]);
     } else {
@@ -68,36 +83,17 @@ if ($tipo == 'registrar') {
         echo json_encode(['status' => false, 'msg' => 'Error, falló en registro']);
     }
     exit;
+    
 }
 
-if ($tipo == "mostrar_productos") {
-    $respuesta = array('status' => false, 'msg' => 'fallo el controlador');
-    $productos = $objProducto->mostrarProductos();
-    $arrProduct = array();
-    if (count($productos)) {
-        foreach ($productos as $producto){
-            $categoria = $objCategoria->ver($producto->id_categoria);
-           if ($categoria && property_exists($categoria, 'nombre')) {
-                $producto->categoria = $categoria->nombre;
-            } else {
-                $producto->categoria = "Sin categoria";
-            }
 
-            $proveedor = $objPersona->ver($producto->id_proveedor);
-            if ($proveedor && property_exists($proveedor, 'razon_social')) {
-                $producto->proveedor = $proveedor->razon_social;
-            } else {
-                $producto->proveedor = "Sin proveedor";
-            }
-            array_push($arrProduct, $producto);
-        }
-        $respuesta = array('status' => true, 'msg' => '', 'data' => $arrProduct);
-    }
-    header('Content-Type: application/json');
-    echo json_encode($respuesta);
-    exit;
+/* Ver productos registrados */
+if ($tipo == "ver_productos") {
+    $productos = $objProducto->verProductos();
+    echo json_encode($productos);
 }
 
+/* Ver para editar */
 if ($tipo == "ver") {
     $respuesta = array('status' => false, 'msg' => '');
     $id_producto = $_POST['id_producto'];
@@ -106,12 +102,14 @@ if ($tipo == "ver") {
         $respuesta['status'] = true;
         $respuesta['data'] = $producto;
     } else {
-        $respuesta['msg'] = "Error, categoria no existe";
+        $respuesta['msg'] = 'Error, producto no existe';
     }
     echo json_encode($respuesta);
 }
 
 
+
+/* Para actualizar */
 if ($tipo == "actualizar") {
     $id_producto = $_POST['id_producto'];
     $codigo = $_POST['codigo'];
@@ -124,17 +122,18 @@ if ($tipo == "actualizar") {
     $id_proveedor = $_POST['id_proveedor'];
 
     if ($id_producto == "" || $codigo == "" || $nombre == "" || $detalle == "" || $precio == "" || $stock == "" || $id_categoria == "" || $fecha_vencimiento == "" || $id_proveedor == "") {
-        $arrResponse = array('status' => false, 'msg' => 'Error, campos vacios');
+
+        $arrResponse = array('status' => false, 'msg' => 'Error, campos vacíos');
     } else {
         $existeID = $objProducto->ver($id_producto);
         if (!$existeID) {
-            $arrResponse = array('status' => false, 'msg' => 'Error, categoria no existe');
+            $arrResponse = array('status' => false, 'msg' => 'Error, producto no existe en BD');
             echo json_encode($arrResponse);
             exit;
         } else {
             $actualizar = $objProducto->actualizar($id_producto, $codigo, $nombre, $detalle, $precio, $stock, $id_categoria, $fecha_vencimiento, $id_proveedor);
             if ($actualizar) {
-                $arrResponse = array('status' => true, 'msg' => 'Actualizado correctamente');
+                $arrResponse = array('status' => true, 'msg' => "Producto actualizado correctamente");
             } else {
                 $arrResponse = array('status' => false, 'msg' => $actualizar);
             }
@@ -144,18 +143,25 @@ if ($tipo == "actualizar") {
     }
 }
 
+/* Método para Eliminar producto */
 if ($tipo == "eliminar") {
-    $id_producto = $_POST['id_producto'];
+    $id_producto = isset($_POST['id']) ? $_POST['id'] : '';
+
     if ($id_producto == "") {
-        $arrResponse = array('status' => false, 'msg' => 'Error, id vacio');
+        $arrResponse = array('status' => false, 'msg' => 'Error, ID vacío');
     } else {
-        $eliminar = $objProducto->eliminar($id_producto);
-        if ($eliminar) {
-            $arrResponse = array('status' => true, 'msg' => 'Producto eliminado');
+        $existeId = $objProducto->ver($id_producto);
+        if (!$existeId) {
+            $arrResponse = array('status' => false, 'msg' => 'Error, producto no existe en Base de Datos');
         } else {
-            $arrResponse = array('status' => false, 'msg' => 'Error al eliminar producto');
+            $eliminar = $objProducto->eliminar($id_producto);
+            if ($eliminar) {
+                $arrResponse = array('status' => true, 'msg' => 'Producto eliminado correctamente');
+            } else {
+                $arrResponse = array('status' => false, 'msg' => 'Error al eliminar el producto');
+            }
         }
-        echo json_encode($arrResponse);
-        exit;
     }
+    echo json_encode($arrResponse);
+    exit;
 }

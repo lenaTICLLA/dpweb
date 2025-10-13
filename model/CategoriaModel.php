@@ -1,73 +1,72 @@
 <?php
 require_once("../library/conexion.php");
-class CategoriaModel{
+class CategoriaModel
+{
     private $conexion;
-    function __construct(){
+    function __construct()
+    {
         $this->conexion = new Conexion();
         $this->conexion = $this->conexion->connect();
     }
-    public function registrar($nombre, $detalle) {
-        $consulta = "INSERT INTO categoria (nombre, detalle) VALUE('$nombre', '$detalle')";
+    public function registrar($nombre, $detalle)
+    {
+        $consulta = "INSERT INTO categoria (nombre, detalle) VALUES ('$nombre', '$detalle')";
         $sql = $this->conexion->query($consulta);
         if ($sql) {
             $sql = $this->conexion->insert_id;
-        }else{
+        } else {
             $sql = 0;
         }
         return $sql;
     }
 
-    public function existeCategoria($nombre){
-        $consulta = "SELECT * FROM categoria WHERE nombre='$nombre'";
+    public function existeCategoria($nombre)
+    {
+        $consulta = "SELECT* FROM categoria where nombre = '$nombre'";
         $sql = $this->conexion->query($consulta);
         return $sql->num_rows;
-
     }
 
-    public function obtenerCategoriaPorId($id)
+
+    /*metodo para buscar una categoria atraves de su numero de nombre */
+    public function buscarCategoriaPorNroNombre($nombre)
     {
-        $stmt = $this->conexion->prepare("SELECT * FROM categoria WHERE id = ?");
-        $stmt->bind_param("i", $id);
-        $stmt->execute();
-        $resultado = $stmt->get_result();
-        return $resultado->fetch_assoc();
-    }
-
-    public function buscarCategoriaPorNombre($nombre){
-        $consulta = "SELECT id, nombre FROM categoria WHERE nombre='$nombre' LIMIT 1";
+        $consulta = "SELECT id, nombre from categoria where nombre = '$nombre' limit 1;";
         $sql = $this->conexion->query($consulta);
         return $sql->fetch_object();
     }
 
-    
-    public function mostrarCategorias() {
+    /*metodo para listar */
+    public function verCategorias()
+    {
         $arr_categorias = array();
-        $consulta = "SELECT * FROM categoria";
+        $consulta = "SELECT* from categoria";
         $sql = $this->conexion->query($consulta);
-        if (!$sql) {
-            error_log("Error en query(): " . $this->conexion->error);
-            return $arr_categorias;
-        }
         while ($objeto = $sql->fetch_object()) {
             array_push($arr_categorias, $objeto);
         }
         return $arr_categorias;
     }
-    
 
-    public function ver($id){
-        $consulta = "SELECT * FROM categoria WHERE id = '$id'";
+    /*metodo para ver  */
+    public function ver($id)
+    {
+        $consulta = "SELECT * FROM categoria WHERE id='$id'";
         $sql = $this->conexion->query($consulta);
         return $sql->fetch_object();
     }
 
-    public function actualizar($id_categoria, $nombre, $detalle){
-        $consulta = "UPDATE categoria SET nombre='$nombre', detalle='$detalle' WHERE id= '$id_categoria'";
+    //metodo para actualizar
+    public function actualizar($id_categoria, $nombre, $detalle)
+    {
+        $consulta = "UPDATE categoria SET nombre = '$nombre', detalle = '$detalle' WHERE id = '$id_categoria'";
         $sql = $this->conexion->query($consulta);
         return $sql;
     }
 
-    public function eliminar($id_categoria){
+    //metodo para eliminar
+    public function eliminar($id_categoria)
+    {
         $consulta = "DELETE FROM categoria WHERE id='$id_categoria'";
         $sql = $this->conexion->query($consulta);
         return $sql;

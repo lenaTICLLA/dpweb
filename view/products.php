@@ -1,10 +1,10 @@
 <div class="container container-glass">
   <div class="d-flex justify-content-between align-items-center mb-4 arriba">
-    <h3 class="title">👤 Lista de Usuarios</h3>
+    <h3 class="title">📦 Lista de Productos</h3>
     <div>
-      <a href="<?php echo BASE_URL; ?>new-user" class="btn btn-primary me-2">➕ Nuevo Usuario</a>
-      <a href="<?php echo BASE_URL; ?>cliente" class="btn btn-secondary me-2">👥 Clientes</a>
-      <a href="<?php echo BASE_URL; ?>proveedor" class="btn btn-secondary">🏭 Proveedores</a>
+      <a href="<?php echo BASE_URL; ?>new-products" class="btn btn-primary me-2">➕ Nuevo Producto</a>
+      <a href="<?php echo BASE_URL; ?>proveedor" class="btn btn-secondary me-2">🏭 Proveedores</a>
+      <a href="<?php echo BASE_URL; ?>users" class="btn btn-secondary">👤 Usuarios</a>
     </div>
   </div>
 
@@ -12,28 +12,30 @@
     <table class="table table-bordered align-middle text-center">
       <thead>
         <tr>
-          <th>Nro</th>
-          <th>DNI</th>
-          <th>Nombres y Apellidos</th>
-          <th>Correo</th>
-          <th>Rol</th>
-          <th>Estado</th>
+          <th>N°</th>
+          <th>Código</th>
+          <th>Nombre</th>
+          <th>Detalle</th>
+          <th>Precio</th>
+          <th>Stock</th>
+          <th>Categoría</th>
+          <th>Proveedor</th>
           <th>Acciones</th>
         </tr>
       </thead>
-      <tbody id="content_user">
-        <!-- Aquí se cargan los usuarios -->
+      <tbody id="content_product">
+        <!-- Se cargan los productos dinámicamente -->
       </tbody>
     </table>
   </div>
 </div>
 
-<!-- Tu archivo JS -->
-<script src="<?php echo BASE_URL; ?>view/funtion/user.js"></script>
+<!-- Script JS -->
+<script src="<?php echo BASE_URL; ?>view/funtion/product.js"></script>
 
-<!-- 🔮 ESTILO DIRECTAMENTE AQUÍ -->
+<!-- 🔮 ESTILO “GLASS” -->
 <style>
-/* ======== ESTILO GLOBAL ======== */
+/* ======== FONDO GLOBAL ======== */
 body {
   background: linear-gradient(135deg, #5c0029, #9b3b61, #f5a3c7);
   background-attachment: fixed;
@@ -44,7 +46,7 @@ body {
   padding: 0;
 }
 
-/* ======== CONTENEDOR “GLASS” ======== */
+/* ======== CONTENEDOR GLASS ======== */
 .container-glass {
   background: rgba(255, 255, 255, 0.12);
   backdrop-filter: blur(12px);
@@ -103,36 +105,13 @@ body {
 .table th {
   color: #fff;
   font-weight: 600;
+  text-transform: uppercase;
+  font-size: 14px;
 }
 
 .table tbody tr:hover {
   background-color: rgba(255, 255, 255, 0.15);
   transition: 0.3s;
-}
-
-/* ======== ANIMACIÓN ======== */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* ======== ENCABEZADO ======== */
-.arriba h3 {
-  margin: 0;
-}
-
-.arriba a {
-  text-decoration: none;
-}
-
-.arriba .btn {
-  font-weight: 500;
 }
 
 /* ======== SCROLL ======== */
@@ -150,6 +129,18 @@ body {
 .table-responsive::-webkit-scrollbar-thumb {
   background-color: #c72b6c;
   border-radius: 4px;
+}
+
+/* ======== ANIMACIÓN ======== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 </style>
 
