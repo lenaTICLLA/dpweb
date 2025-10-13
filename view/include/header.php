@@ -21,25 +21,16 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                        <a class="nav-link active" aria-current="page" href="<?= BASE_URL ?>home">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= BASE_URL ?>new-user">New-user</a>
+                        <a class="nav-link" href="<?= BASE_URL ?>users">Lista de Usuarios</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= BASE_URL ?>users">Users</a>
+                        <a class="nav-link" href="<?= BASE_URL ?>products">Lista de Productos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= BASE_URL ?>new-producto">Nuevo Producto</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?= BASE_URL ?>productos-lista">Lista de Productos</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?= BASE_URL ?>new-categoria">Nueva Categoria</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?= BASE_URL ?>categorias-lista">Lista de Categorias</a>
+                        <a class="nav-link" href="<?= BASE_URL ?>category">Lista de Categorias</a>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Clients</a>
                     </li>

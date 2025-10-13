@@ -1,10 +1,10 @@
 <div class="container container-glass">
   <div class="d-flex justify-content-between align-items-center mb-4 arriba">
-    <h3 class="title">👤 Lista de Usuarios</h3>
+    <h3 class="title">📂 Lista de Categorías</h3>
     <div>
-      <a href="<?php echo BASE_URL; ?>new-user" class="btn btn-primary me-2">➕ Nuevo Usuario</a>
-      <a href="<?php echo BASE_URL; ?>cliente" class="btn btn-secondary me-2">👥 Clientes</a>
-      <a href="<?php echo BASE_URL; ?>proveedor" class="btn btn-secondary">🏭 Proveedores</a>
+      <a href="<?php echo BASE_URL; ?>new-category" class="btn btn-primary me-2">➕ Nueva Categoría</a>
+      <a href="<?php echo BASE_URL; ?>products" class="btn btn-secondary me-2">🛍 Productos</a>
+      <a href="<?php echo BASE_URL; ?>users" class="btn btn-secondary">👤 Usuarios</a>
     </div>
   </div>
 
@@ -13,25 +13,22 @@
       <thead>
         <tr>
           <th>Nro</th>
-          <th>DNI</th>
-          <th>Nombres y Apellidos</th>
-          <th>Correo</th>
-          <th>Rol</th>
-          <th>Estado</th>
+          <th>Nombre</th>
+          <th>Detalles</th>
           <th>Acciones</th>
         </tr>
       </thead>
-      <tbody id="content_user">
-        <!-- Aquí se cargan los usuarios -->
+      <tbody id="content_category">
+        <!-- Aquí se cargan las categorías -->
       </tbody>
     </table>
   </div>
 </div>
 
-<!-- Tu archivo JS -->
-<script src="<?php echo BASE_URL; ?>view/funtion/user.js"></script>
+<!-- 🔧 Script JS -->
+<script src="<?php echo BASE_URL; ?>view/funtion/category.js"></script>
 
-<!-- 🔮 ESTILO DIRECTAMENTE AQUÍ -->
+<!-- 🎨 ESTILO INTEGRADO -->
 <style>
 /* ======== ESTILO GLOBAL ======== */
 body {
