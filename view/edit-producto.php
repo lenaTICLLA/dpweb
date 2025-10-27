@@ -1,8 +1,9 @@
 <!-- INICIO DE CUERPO DE PAGINA -->
-<div class="container-fluid mt-4">
+    <div class="container-fluid mt-4">
     <div class="card">
-        <h5 class="card-header">Registrar Producto</h5>
-        <form id="frm_produc" action="" method="" enctype="multipart/form-data">
+        <h5 class="card-header">Actualizar Producto</h5>
+        <form id="frm_edit_produc">
+            <input type="hidden" id="id_producto" name="id_producto">
             <div class="card-body">
                 <div class="mb-3 row">
                     <label for="codigo" class="col-sm-4 col-form-label">Codigo:</label>
@@ -41,8 +42,8 @@
                         <input type="date" class="form-control" id="fecha_vencimiento" name="fecha_vencimiento" required>
                     </div>
                 </div>
-   <div class="mb-3 row align-items-center">
-  <label for="imagen" class="col-sm-4 col-form-label">Imagen:</label>
+                <div class="mb-3 row align-items-center">
+                    <label for="imagen" class="col-sm-4 col-form-label">Imagen:</label>
   <div class="col-sm-8">
     <div class="image-box-rect">
       <input type="file" name="imagen" id="imagen" accept="image/*" class="form-control form-control-sm">
@@ -57,7 +58,7 @@
                     <div class="col-sm-8">
                         <select class="form-control" id="id_categoria" name="id_categoria" required>
                             <option value="">Seleccione una categoría</option>
-
+                            <!-- Las opciones se cargarán dinámicamente con JavaScript -->
                         </select>
                     </div>
                 </div>
@@ -66,16 +67,14 @@
                     <div class="col-sm-8">
                         <select class="form-control" id="id_persona" name="id_persona" required>
                             <option value="">Seleccionar Proveedor</option>
-                         
+                        
                         </select>
                     </div>
                 </div>
-
-
                 <div class="d-flex justify-content-end gap-2">
-                    <button type="submit" class="btn btn-success">Registrar</button>
-                    <button type="reset" class="btn btn-info">Limpiar</button>
-                    <a href="<?=BASE_URL ?>produc" type="button" class="btn btn-danger">Cancelar</a>
+                    <input type="hidden" name="imagen_actual" id="imagen_actual" value="">
+                    <button type="button" class="btn btn-primary" id="btn_guardar">Actualizar</button>
+                    <a href="<?= BASE_URL ?>produc" type="button" class="btn btn-danger">Cancelar</a>
                 </div>
             </div>
         </form>
@@ -83,12 +82,24 @@
 </div>
 <!-- FIN DE CUERPO DE PAGINA -->
 <script src="<?php echo BASE_URL; ?>view/function/products.js"></script>
+
+
 <script>
+   document.addEventListener('DOMContentLoaded', async () => {
+    let partes = window.location.pathname.split('/');
+    let id = partes[partes.length - 1];
 
-        cargarCategorias(); // Cargar categorías al iniciar la página
-        cargarProveedores();
+    // Esperar a que se carguen las categorías y los proveedores
+    await Promise.all([
+        cargarCategorias(),
+        cargarProveedores()
+    ]);
 
-    
+    // Luego cargar los datos del producto
+    if (!isNaN(id)) {
+        await obtenerProductoPorId(id);
+    }
+});
 </script>
 
 <style>

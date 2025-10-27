@@ -3,35 +3,29 @@
     <h3 class="title">👥 Lista de Clientes</h3>
     <div>
       <a href="<?php echo BASE_URL; ?>new-cliente" class="btn btn-primary me-2">➕ Nuevo Cliente</a>
-      <a href="<?php echo BASE_URL; ?>users" class="btn btn-secondary me-2">👤 Usuarios</a>
-      <a href="<?php echo BASE_URL; ?>proveedor" class="btn btn-secondary">🏭 Proveedores</a>
     </div>
   </div>
 
   <div class="table-responsive">
     <table class="table table-bordered align-middle text-center">
-      <thead>
-        <tr>
-          <th>Nro</th>
-          <th>DNI</th>
-          <th>Nombres y Apellidos</th>
-          <th>Correo</th>
-          <th>Dirección</th>
-          <th>Teléfono</th>
-          <th>Acciones</th>
+    <thead class="table-dark">
+        <tr class="text-center">
+            <th>Nro</th>
+            <th>DNI</th>
+            <th>Nombres y Apellidos</th>
+            <th>Correo</th>
+            <th>Rol</th>
+            <th>Estado</th>
+            <th>Acciones</th>
         </tr>
-      </thead>
-      <tbody id="content_clientes">
-        <!-- Aquí se cargan los clientes -->
-      </tbody>
-    </table>
-  </div>
+    </thead>
+    <tbody id="content_clients">
+
+    </tbody>
+</table>
 </div>
-
-<!-- Archivo JS -->
-<script src="<?php echo BASE_URL; ?>view/funtion/user.js"></script>
-
-<!-- ======== ESTILO GLASS ======== -->
+<script src="<?= BASE_URL ?>view/function/clients.js"></script>
+<!--script>view_users();</script-->
 <style>
 body {
   background: linear-gradient(135deg, #5c0029, #9b3b61, #f5a3c7);
@@ -128,3 +122,11 @@ body {
 <!-- Bootstrap -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+<style>
+  .table td .btn { padding: .25rem .45rem; }
+  .table td i.bi { font-size: 1rem; }
+</style>
+
+

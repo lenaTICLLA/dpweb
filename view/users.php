@@ -3,37 +3,32 @@
     <h3 class="title">👤 Lista de Usuarios</h3>
     <div>
       <a href="<?php echo BASE_URL; ?>new-user" class="btn btn-primary me-2">➕ Nuevo Usuario</a>
-      <a href="<?php echo BASE_URL; ?>cliente" class="btn btn-secondary me-2">👥 Clientes</a>
-      <a href="<?php echo BASE_URL; ?>proveedor" class="btn btn-secondary">🏭 Proveedores</a>
     </div>
   </div>
 
   <div class="table-responsive">
     <table class="table table-bordered align-middle text-center">
-      <thead>
-        <tr>
-          <th>Nro</th>
-          <th>DNI</th>
-          <th>Nombres y Apellidos</th>
-          <th>Correo</th>
-          <th>Rol</th>
-          <th>Estado</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody id="content_user">
-        <!-- Aquí se cargan los usuarios -->
-      </tbody>
-    </table>
-  </div>
+    <thead class="table-dark">
+        <tr class="text-center">
+                    <th>Nro</th>
+                    <th>DNI</th>
+                    <th>Nombres y Apellidos</th>
+                    <th>Correo</th>
+                    <th>Rol</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="content_users">
+
+            </tbody>
+        </table>
+    </div>
+
 </div>
-
-<!-- Tu archivo JS -->
-<script src="<?php echo BASE_URL; ?>view/funtion/user.js"></script>
-
-<!-- 🔮 ESTILO DIRECTAMENTE AQUÍ -->
+<script src="<?= BASE_URL ?>view/function/user.js"></script>
+<!--script>view_users();</script-->
 <style>
-/* ======== ESTILO GLOBAL ======== */
 body {
   background: linear-gradient(135deg, #5c0029, #9b3b61, #f5a3c7);
   background-attachment: fixed;
@@ -44,7 +39,7 @@ body {
   padding: 0;
 }
 
-/* ======== CONTENEDOR “GLASS” ======== */
+
 .container-glass {
   background: rgba(255, 255, 255, 0.12);
   backdrop-filter: blur(12px);
@@ -55,14 +50,14 @@ body {
   animation: fadeIn 1s ease forwards;
 }
 
-/* ======== TÍTULO ======== */
+
 .title {
   color: #fff;
   font-weight: 600;
   letter-spacing: 1px;
 }
 
-/* ======== BOTONES ======== */
+
 .btn-primary {
   background-color: #c72b6c !important;
   border-color: #c72b6c !important;
@@ -88,7 +83,7 @@ body {
   transform: scale(1.05);
 }
 
-/* ======== TABLA ======== */
+
 .table {
   color: #fff;
   background: rgba(255, 255, 255, 0.08);
@@ -110,7 +105,7 @@ body {
   transition: 0.3s;
 }
 
-/* ======== ANIMACIÓN ======== */
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -122,7 +117,6 @@ body {
   }
 }
 
-/* ======== ENCABEZADO ======== */
 .arriba h3 {
   margin: 0;
 }
@@ -135,7 +129,7 @@ body {
   font-weight: 500;
 }
 
-/* ======== SCROLL ======== */
+
 .table-responsive {
   max-height: 480px;
   overflow-y: auto;
@@ -156,3 +150,9 @@ body {
 <!-- Bootstrap CDN -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+<style>
+  .table td .btn { padding: .25rem .45rem; }
+  .table td i.bi { font-size: 1rem; }
+</style>
