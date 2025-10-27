@@ -44,8 +44,8 @@
             </form>
         </div>
     </div>
-    <script src="<?= BASE_URL; ?>view/funtion/user.js"></script>
-    <script src="<?= BASE_URL; ?>view/funtion/sesion.js"></script>
+    <script src="<?= BASE_URL; ?>view/function/user.js"></script>
+    <script src="<?= BASE_URL; ?>view/function/sesion.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>

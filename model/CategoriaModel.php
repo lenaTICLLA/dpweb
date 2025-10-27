@@ -19,56 +19,59 @@ class CategoriaModel
         }
         return $sql;
     }
-
     public function existeCategoria($nombre)
     {
-        $consulta = "SELECT* FROM categoria where nombre = '$nombre'";
+        $consulta = "SELECT * FROM categoria WHERE nombre='$nombre'";
         $sql = $this->conexion->query($consulta);
         return $sql->num_rows;
     }
 
+    // ver categoria 
 
-    /*metodo para buscar una categoria atraves de su numero de nombre */
-    public function buscarCategoriaPorNroNombre($nombre)
-    {
-        $consulta = "SELECT id, nombre from categoria where nombre = '$nombre' limit 1;";
-        $sql = $this->conexion->query($consulta);
-        return $sql->fetch_object();
-    }
-
-    /*metodo para listar */
     public function verCategorias()
     {
         $arr_categorias = array();
-        $consulta = "SELECT* from categoria";
-        $sql = $this->conexion->query($consulta);
-        while ($objeto = $sql->fetch_object()) {
+        $consulta = "SELECT * FROM categoria";
+        $result = $this->conexion->query($consulta);
+        while ($objeto = $result->fetch_object()) {
             array_push($arr_categorias, $objeto);
         }
         return $arr_categorias;
     }
 
-    /*metodo para ver  */
-    public function ver($id)
+    public function obtenerCategoriaPorId($id)
     {
-        $consulta = "SELECT * FROM categoria WHERE id='$id'";
-        $sql = $this->conexion->query($consulta);
-        return $sql->fetch_object();
+        $stmt = $this->conexion->prepare("SELECT * FROM categoria WHERE id = ?");
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $resultado = $stmt->get_result();
+        return $resultado->fetch_assoc();
     }
 
-    //metodo para actualizar
-    public function actualizar($id_categoria, $nombre, $detalle)
+    public function buscarPorNombre($nombre)
     {
-        $consulta = "UPDATE categoria SET nombre = '$nombre', detalle = '$detalle' WHERE id = '$id_categoria'";
-        $sql = $this->conexion->query($consulta);
-        return $sql;
+        $stmt = $this->conexion->prepare("SELECT id FROM categoria WHERE nombre = ?");
+        $stmt->bind_param("s", $nombre);
+        $stmt->execute();
+        $resultado = $stmt->get_result();
+        return $resultado->fetch_assoc();
     }
 
-    //metodo para eliminar
-    public function eliminar($id_categoria)
+    public function actualizarCategoria($data)
     {
-        $consulta = "DELETE FROM categoria WHERE id='$id_categoria'";
-        $sql = $this->conexion->query($consulta);
-        return $sql;
+        $stmt = $this->conexion->prepare("UPDATE categoria SET nombre = ?, detalle = ? WHERE id = ?");
+        $stmt->bind_param("ssi", $data['nombre'], $data['detalle'], $data['id_categoria']);
+        return $stmt->execute();
+    }
+//eliminar catecogoria
+    public function eliminarCategoria($id)
+    {
+        $stmt = $this->conexion->prepare("DELETE FROM categoria WHERE id = ?");
+        $stmt->bind_param("i", $id);
+        if ($stmt->execute()) {
+            return ["status" => true, "msg" => "Categoría eliminada correctamente"];
+        } else {
+            return ["status" => false, "msg" => "Error al eliminar la categoría"];
+        }
     }
 }

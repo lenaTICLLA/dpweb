@@ -1,9 +1,9 @@
-
 <!-- INICIO DE CUERPO DE PAGINA -->
     <div class="container-fluid">
         <div class="card">
-            <h5 class="card-header">Registro de Proveeddor</h5>
-            <form id="frm_proveedor" action="" method="">
+            <h5 class="card-header">Registro de Usuario</h5>
+            <form id="frm_edit_cliente" action="" method="">
+                <input type="hidden" id="id_persona" name="id_persona">
                 <div class="card-body">
                     <div class="mb-3 row">
                         <label for="nro_identidad" class="col-sm-4 col-form-label">Nro de Documento :</label>
@@ -63,18 +63,15 @@
                         <label for="rol" class="col-sm-4 col-form-label">Rol :</label>
                         <div class="col-sm-8">
                             <select class="form-control" name="rol" id="rol" required>
-                                <option disabled selected>seleccionar rol</option>
-                                <option value="3" selected>proveedor</option>
-                         
-                            </select>
-        
+                            
+                                <option value="2">cliente</option>
                            
+                            </select>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-success">Registrar</button>
-                    <button type="reset" class="btn btn-info">Limpiar</button>
-                     <a href="<?=BASE_URL ?>proveedor" type="button" class="btn btn-danger">Cancelar</a>
-                     
+                 <button type="submit" class="btn btn-primary" id="btn_guardar_cambios">Guardar Cambios</button>
+                   <a href="<?=BASE_URL ?>cliente" type="button" class="btn btn-danger">Cancelar</a>
+                  
                     
                 </div>
             </form>
@@ -82,8 +79,19 @@
     </div>
     </div>
 <!-- FIN DE CUERPO DE PAGINA -->
-<script src="<?php echo BASE_URL; ?>view/function/proveedor.js"></script> 
 
+
+ <script src="<?php echo BASE_URL; ?>view/function/clients.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    let partes = window.location.pathname.split('/');
+    let id = partes[partes.length - 1];
+    if (!isNaN(id)) {
+        edit_client(id);
+    }
+});
+</script>
 
 
 

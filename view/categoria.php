@@ -1,32 +1,31 @@
 <div class="container container-glass">
   <div class="d-flex justify-content-between align-items-center mb-4 arriba">
-    <h3 class="title">🏭 Lista de Proveedores</h3>
+    <h3 class="title">📂 Lista de Categorías</h3>
     <div>
-      <a href="<?php echo BASE_URL; ?>new-proveedor" class="btn btn-primary me-2">➕ Nuevo Proveedor</a>
+      <a href="<?php echo BASE_URL; ?>categories" class="btn btn-primary me-2">➕ Nueva Categoría</a>
     </div>
   </div>
 
   <div class="table-responsive">
     <table class="table table-bordered align-middle text-center">
-    <thead class="table-dark">
-        <tr class="text-center">
-            <th>Nro</th>
-            <th>DNI</th>
-            <th>Nombres y Apellidos</th>
-            <th>Correo</th>
-            <th>Rol</th>
-            <th>Estado</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody id="content_proveedores">
+        <thead class="table-dark">
+            <tr class="text-center">
+                <th>Nro</th>
+                <th>Nombre</th>
+                <th>Detalle</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody id="content_categories">
 
-    </tbody>
-</table>
+        </tbody>
+    </table>
 </div>
-<script src="<?= BASE_URL ?>view/function/proveedor.js"></script>
+
+<script src="<?= BASE_URL ?>view/function/categories.js"></script>
 <!--script>view_users();</script-->
 <style>
+/* ======== ESTILO GLOBAL ======== */
 body {
   background: linear-gradient(135deg, #5c0029, #9b3b61, #f5a3c7);
   background-attachment: fixed;
@@ -37,6 +36,7 @@ body {
   padding: 0;
 }
 
+/* ======== CONTENEDOR “GLASS” ======== */
 .container-glass {
   background: rgba(255, 255, 255, 0.12);
   backdrop-filter: blur(12px);
@@ -47,12 +47,14 @@ body {
   animation: fadeIn 1s ease forwards;
 }
 
+/* ======== TÍTULO ======== */
 .title {
   color: #fff;
   font-weight: 600;
   letter-spacing: 1px;
 }
 
+/* ======== BOTONES ======== */
 .btn-primary {
   background-color: #c72b6c !important;
   border-color: #c72b6c !important;
@@ -100,6 +102,31 @@ body {
   transition: 0.3s;
 }
 
+/* ======== ANIMACIÓN ======== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ======== ENCABEZADO ======== */
+.arriba h3 {
+  margin: 0;
+}
+
+.arriba a {
+  text-decoration: none;
+}
+
+.arriba .btn {
+  font-weight: 500;
+}
+
 /* ======== SCROLL ======== */
 .table-responsive {
   max-height: 480px;
@@ -115,17 +142,6 @@ body {
 .table-responsive::-webkit-scrollbar-thumb {
   background-color: #c72b6c;
   border-radius: 4px;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 </style>
 

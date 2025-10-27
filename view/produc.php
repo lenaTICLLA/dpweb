@@ -1,8 +1,8 @@
 <div class="container container-glass">
   <div class="d-flex justify-content-between align-items-center mb-4 arriba">
-    <h3 class="title">🏭 Lista de Proveedores</h3>
+    <h3 class="title">📦 Lista de Productos</h3>
     <div>
-      <a href="<?php echo BASE_URL; ?>new-proveedor" class="btn btn-primary me-2">➕ Nuevo Proveedor</a>
+      <a href="<?php echo BASE_URL; ?>products" class="btn btn-primary me-2">➕ Nuevo Producto</a>
     </div>
   </div>
 
@@ -11,22 +11,25 @@
     <thead class="table-dark">
         <tr class="text-center">
             <th>Nro</th>
-            <th>DNI</th>
-            <th>Nombres y Apellidos</th>
-            <th>Correo</th>
-            <th>Rol</th>
-            <th>Estado</th>
+            <th>Codigo</th>
+            <th>Nombres</th>
+            <th>Detalle</th>
+            <th>Precio</th>
+            <th>Stock</th>
+            <th>Fecha Vencimiento</th>
+            <th>categoria</th>
             <th>Acciones</th>
         </tr>
     </thead>
-    <tbody id="content_proveedores">
+    <tbody id="content_productos">
 
     </tbody>
 </table>
 </div>
-<script src="<?= BASE_URL ?>view/function/proveedor.js"></script>
+<script src="<?= BASE_URL ?>view/function/products.js"></script>
 <!--script>view_users();</script-->
 <style>
+
 body {
   background: linear-gradient(135deg, #5c0029, #9b3b61, #f5a3c7);
   background-attachment: fixed;
@@ -47,12 +50,14 @@ body {
   animation: fadeIn 1s ease forwards;
 }
 
+/* ======== TÍTULO ======== */
 .title {
   color: #fff;
   font-weight: 600;
   letter-spacing: 1px;
 }
 
+/* ======== BOTONES ======== */
 .btn-primary {
   background-color: #c72b6c !important;
   border-color: #c72b6c !important;
@@ -93,6 +98,8 @@ body {
 .table th {
   color: #fff;
   font-weight: 600;
+  text-transform: uppercase;
+  font-size: 14px;
 }
 
 .table tbody tr:hover {
@@ -117,6 +124,7 @@ body {
   border-radius: 4px;
 }
 
+/* ======== ANIMACIÓN ======== */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -127,6 +135,48 @@ body {
     transform: translateY(0);
   }
 }
+.image-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: #f8f8f8;
+  border: 2px dashed #d1d1d1;
+  border-radius: 10px;
+  padding: 15px;
+  width: 250px;
+  margin: 0 auto;
+  transition: 0.3s;
+}
+
+.image-container:hover {
+  border-color: #c63d63;
+  background: #fff3f7;
+}
+
+.image-container input[type="file"] {
+  border: none;
+  outline: none;
+  background: none;
+  font-size: 14px;
+  cursor: pointer;
+  color: #444;
+}
+
+.image-container img {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  transition: transform 0.3s ease;
+}
+
+.image-container img:hover {
+  transform: scale(1.05);
+}
+
 </style>
 
 <!-- Bootstrap CDN -->
