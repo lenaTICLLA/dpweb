@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
             try {
                 const datos = new FormData(formLogin);
-                let response = await fetch(base_url + "control/usuarioController.php?tipo=iniciar_sesion", {
+                let response = await fetch(base_url + "control/UsuarioController.php?tipo=iniciar_sesion", {
                     method: "POST",
                     body: datos
                 });

@@ -4,6 +4,7 @@ require_once("../model/UsuarioModel.php");
 $objPersona = new UsuarioModel();
 $tipo = $_GET['tipo'] ?? '';
 
+
 /* === REGISTRAR PERSONA === */
 if ($tipo == 'registrar') {
    $nro_identidad = $_POST['nro_identidad'];
@@ -18,7 +19,7 @@ if ($tipo == 'registrar') {
    $rol = $_POST['rol'];
    $password = password_hash($nro_identidad, PASSWORD_DEFAULT);
 
-   
+
    if (
       $nro_identidad == "" || $razon_social == "" || $telefono == "" || $correo == "" ||
       $departamento == "" || $provincia == "" || $distrito == "" ||
