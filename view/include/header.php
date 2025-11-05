@@ -44,6 +44,9 @@
                         <a class="nav-link" href="<?= BASE_URL ?>proveedor">Proveedores</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="<?= BASE_URL ?>vista-cliente">vista clientes</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="#">Shops</a>
                     </li>
                     <li class="nav-item">
