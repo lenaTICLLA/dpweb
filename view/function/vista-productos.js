@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', ()=>{cargarProductos();});
 async function cargarProductos(){
     try{
         const url = base_url+'control/ProductoController.php?tipo=ver_productos';
-        const resp = await fetch(url,{method:'POST', headers:{'Accept':'application/json'}});
+        const resp = await fetch(url, { method: 'GET', headers: { 'Accept': 'application/json' } });
         if(!resp.ok) throw new Error(resp.status);
         const json = await resp.json();
         const productos = Array.isArray(json)?json:(json.data && Array.isArray(json.data)?json.data:[]);

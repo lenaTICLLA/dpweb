@@ -18,6 +18,7 @@
             <th>Stock</th>
             <th>Fecha Vencimiento</th>
             <th>categoria</th>
+            <th>Proveedor</th>
             <th>Acciones</th>
         </tr>
     </thead>

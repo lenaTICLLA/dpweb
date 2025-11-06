@@ -1,374 +1,324 @@
-let productoActualModal = null;
-let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
-// Búsqueda en tiempo real
-const searchInput = document.getElementById('searchInput');
-if (searchInput) {
-    searchInput.addEventListener('input', function() {
-        filtrarProductos();
-    });
-}
+//
+function validar_form() {
+    let formId = document.getElementById("frm_produc") ? "frm_produc" : "frm_edit_produc";
+    let form = document.getElementById(formId);
+    let codigo = document.getElementById("codigo").value;
+    let nombre = document.getElementById("nombre").value;
+    let detalle = document.getElementById("detalle").value;
+    let precio = document.getElementById("precio").value;
+    let stock = document.getElementById("stock").value;
+    let fecha_vencimiento = document.getElementById("fecha_vencimiento").value;
+    //let imagen = document.getElementById("imagen").value;
+    let id_categoria = document.getElementById("id_categoria").value;
 
-// Filtro por categoría
-const categoryFilter = document.getElementById('categoryFilter');
-if (categoryFilter) {
-    categoryFilter.addEventListener('change', function() {
-        filtrarProductos();
-    });
-}
+    if (codigo == "" || nombre == "" || detalle == "" || precio == "" || stock == "" || fecha_vencimiento == "" || id_categoria == "" ) {
+        Swal.fire({
+            title: "ERROR",
+            text: "¡Ups! Hay campos vacíos.",
+            icon: "error"
+        });
+        return;
+    }
 
-function filtrarProductos() {
-    const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
-    const selectedCategory = categoryFilter ? categoryFilter.value : '';
-    const productosGrid = document.getElementById('productosGrid');
-    const productoCards = productosGrid.querySelectorAll('.producto-card');
-    const noResultados = document.getElementById('noResultados');
+    // Validaciones adicionales
+    if (parseFloat(precio) < 0) {
+        Swal.fire({
+            title: "¡Error!",
+            text: "El precio no puede ser negativo.",
+            icon: "error"
+        });
+        return;
+    }
     
-    let visibleCount = 0;
+    if (parseInt(stock) < 0) {
+        Swal.fire({
+            title: "¡Error!",
+            text: "El stock no puede ser negativo.",
+            icon: "error"
+        });
+        return;
+    }
 
-    productoCards.forEach((card, index) => {
-        const nombre = card.dataset.nombre || '';
-        const categoria = card.dataset.categoria || '';
-        
-        const matchSearch = nombre.includes(searchTerm);
-        const matchCategory = !selectedCategory || categoria === selectedCategory;
-        
-        if (matchSearch && matchCategory) {
-            card.style.display = 'block';
-            // Animación escalonada al aparecer
-            card.style.animation = 'none';
-            setTimeout(() => {
-                card.style.animation = `fadeInUp 0.6s ease-out forwards ${index * 0.05}s`;
-            }, 10);
-            visibleCount++;
-        } else {
-            card.style.display = 'none';
-        }
-    });
-
-    // Mostrar mensaje si no hay resultados
-    if (noResultados) {
-        noResultados.style.display = visibleCount === 0 ? 'block' : 'none';
+    if (parseInt(id_categoria) < 1) {
+        Swal.fire({
+            title: "¡Error!",
+            text: "El ID de categoría debe ser un número positivo.",
+            icon: "error"
+        });
+        return;
+    }
+    
+    if (form.dataset.edit === "true") {
+        actualizarProducto();
+    } else {
+        registrarProducto();
     }
 }
 
-async function verDetalleProducto(idProducto) {
+if (document.querySelector('#frm_produc')) {
+    let frm_produc = document.querySelector('#frm_produc');
+    frm_produc.onsubmit = function (e) {
+        e.preventDefault();
+        validar_form();
+    };
+}
+
+if (document.querySelector('#frm_edit_produc')) {
+    let frm_edit_produc = document.querySelector('#frm_edit_produc');
+    frm_edit_produc.onsubmit = function (e) {
+        e.preventDefault();
+        validar_form();
+    };
+}
+
+async function registrarProducto() {
     try {
-        const response = await fetch(`${base_url}control/ProductoController.php?tipo=obtener_producto&id=${idProducto}`);
-        const producto = await response.json();
-
-        if (!producto || Object.keys(producto).length === 0) {
+        const datos = new FormData(document.getElementById('frm_produc'));
+        //enviar datos a controlador
+        let respuesta = await fetch(base_url + 'control/ProductoController.php?tipo=registrar', {
+            method: 'POST',
+            mode: 'cors',
+            cache: 'no-cache',
+            body: datos
+        });
+        let json = await respuesta.json();
+        if (json.status) {
             Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'No se pudo cargar el producto',
-                background: '#6D3C52',
-                color: '#FADCD5',
-                confirmButtonColor: '#FADCD5',
-                confirmButtonText: 'Cerrar'
+                title: json.msg,
+                icon: "success",
+                draggable: true
             });
-            return;
+            document.getElementById('frm_produc').reset();
+            // Limpiar la imagen
+            const imagenActual = document.getElementById('imagen_actual');
+            const imagenPreview = document.getElementById('imagen_preview');
+            if (imagenActual) imagenActual.textContent = 'No hay imagen seleccionada';
+            if (imagenPreview) {
+                imagenPreview.style.display = 'none';
+                imagenPreview.src = '';
+            }
+        } else {
+            Swal.fire({
+                title: json.msg,
+                icon: "error",
+                draggable: true
+            });
         }
-
-        // Guardar producto actual para el modal
-        productoActualModal = producto;
-
-        // Llenar datos del modal
-        document.getElementById('modalProductoTitulo').textContent = producto.nombre || 'Sin nombre';
-        document.getElementById('modalProductoNombre').textContent = producto.nombre || 'Sin nombre';
-        document.getElementById('modalProductoCategoria').textContent = producto.categoria || 'General';
-        document.getElementById('modalProductoDetalle').textContent = producto.detalle || 'Sin descripción';
-        document.getElementById('modalProductoPrecio').textContent = `S/ ${parseFloat(producto.precio || 0).toFixed(2)}`;
-        document.getElementById('modalProductoStock').textContent = `${producto.stock || 0} disponibles`;
-        
-        // Imagen del producto
-        const imgElement = document.getElementById('modalProductoImg');
-        const rutaImagen = producto.imagen ? `${base_url}${producto.imagen}` : `${base_url}assets/img/no-image.png`;
-        imgElement.src = rutaImagen;
-        imgElement.alt = producto.nombre || 'Producto';
-
-        // Abrir modal con animación
-        const modal = new bootstrap.Modal(document.getElementById('modalDetalleProducto'));
-        modal.show();
-
-        // Agregar efecto de entrada
-        const modalContent = document.querySelector('.modal-producto .modal-content');
-        modalContent.style.animation = 'fadeInScale 0.4s ease-out';
-
-    } catch (error) {
-        console.error('Error al cargar producto:', error);
+    } catch (e) {
+        console.error("Error al registrar producto:", e);
         Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Ocurrió un error al cargar el producto',
-            background: '#6D3C52',
-            color: '#FADCD5',
-            confirmButtonColor: '#FADCD5',
-            confirmButtonText: 'Cerrar'
+            title: "Error",
+            text: "Error al registrar: " + e.message,
+            icon: "error"
         });
     }
 }
-// FUNCIONES DEL CARRITO
-async function agregarAlCarrito(idProducto) {
+
+async function actualizarProducto() {
     try {
-        const response = await fetch(`${base_url}control/ProductoController.php?tipo=obtener_producto&id=${idProducto}`);
-        const producto = await response.json();
+        const datos = new FormData(document.getElementById('frm_edit_produc'));
+        const idProducto = document.getElementById('id_producto').value;
 
-        if (!producto || Object.keys(producto).length === 0) {
-            mostrarNotificacion('Error al obtener el producto', 'error');
-            return;
-        }
-
-        // Verificar stock
-        if (producto.stock <= 0) {
-            mostrarNotificacion('Producto sin stock disponible', 'warning');
-            return;
-        }
-
-        // Buscar si el producto ya está en el carrito
-        const indexExistente = carrito.findIndex(item => item.id === producto.id);
-
-        if (indexExistente !== -1) {
-            // Si existe, incrementar cantidad
-            const cantidadActual = carrito[indexExistente].cantidad;
-            
-            if (cantidadActual >= producto.stock) {
-                mostrarNotificacion('No hay más stock disponible', 'warning');
-                return;
-            }
-
-            carrito[indexExistente].cantidad++;
+        if (idProducto) {
+            datos.append('id_producto', idProducto);
         } else {
-            // Si no existe, agregar nuevo
-            carrito.push({
-                id: producto.id,
-                nombre: producto.nombre,
-                precio: parseFloat(producto.precio),
-                imagen: producto.imagen,
-                cantidad: 1,
-                stock: producto.stock
+            Swal.fire({
+                title: "Error",
+                text: "No se encontró el ID del producto.",
+                icon: "error"
+            });
+            return;
+        }
+
+        for (let pair of datos.entries()) {
+            console.log(`${pair[0]}: ${pair[1]}`);
+        }
+
+        let respuesta = await fetch(base_url + 'control/ProductoController.php?tipo=actualizar_producto', {
+            method: 'POST',
+            mode: 'cors',
+            cache: 'no-cache',
+            body: datos
+        });
+
+        let json = await respuesta.json();
+        console.log("Respuesta de actualización:", json);
+        if (json.status) {
+            Swal.fire({
+                title: json.msg,
+                icon: "success",
+                draggable: true
+               }).then(() => {
+        // Redirigir después de cerrar el alert
+        location.href = base_url + 'produc';
+        // view_productos(); // Solo si quieres actualizar sin recargar
+    });
+        } else {
+            Swal.fire({
+                title: json.msg,
+                icon: "error",
+                draggable: true
             });
         }
-
-        // Guardar en localStorage
-        localStorage.setItem('carrito', JSON.stringify(carrito));
-
-        // Actualizar contador del carrito (si existe)
-        actualizarContadorCarrito();
-
-        // Animación del botón
-        const btn = event.target.closest('button');
-        if (btn) {
-            btn.style.transform = 'scale(0.9)';
-            setTimeout(() => {
-                btn.style.transform = 'scale(1)';
-            }, 200);
-        }
-
-        // Mostrar notificación
-        mostrarNotificacion(`${producto.nombre} agregado al carrito`, 'success');
-
-    } catch (error) {
-        console.error('Error al agregar al carrito:', error);
-        mostrarNotificacion('Error al agregar al carrito', 'error');
+    } catch (e) {
+        console.error("Error al actualizar producto:", e);
+        Swal.fire({
+            title: "Error",
+            text: "Error al actualizar: " + e.message,
+            icon: "error"
+        });
     }
 }
 
-function agregarAlCarritoDesdeModal() {
-    if (productoActualModal && productoActualModal.id) {
-        agregarAlCarrito(productoActualModal.id);
-        
-        // Cerrar modal después de agregar
-        setTimeout(() => {
-            const modalElement = document.getElementById('modalDetalleProducto');
-            const modal = bootstrap.Modal.getInstance(modalElement);
-            if (modal) {
-                modal.hide();
+async function obtenerProductoPorId(id) {
+    try {
+        let respuesta = await fetch(base_url + 'control/ProductoController.php?tipo=obtener_producto&id=' + id);
+        let producto = await respuesta.json();
+        console.log("Producto recibido:", producto); // Verifica en la consola
+        if (producto) {
+            document.getElementById('id_producto').value = producto.id || '';
+            document.getElementById('codigo').value = producto.codigo || '';
+            document.getElementById('nombre').value = producto.nombre || '';
+            document.getElementById('detalle').value = producto.detalle || '';
+            document.getElementById('precio').value = producto.precio || '';
+            document.getElementById('stock').value = producto.stock || '';
+            document.getElementById('fecha_vencimiento').value = producto.fecha_vencimiento || '';
+            document.getElementById('id_categoria').value = producto.id_categoria || ''; // Asegurar asignación
+            document.getElementById('id_persona').value = producto.id_proveedor || '';
+           // Mostrar la URL de la imagen existente
+            const imagenActual = document.getElementById('imagen_actual');
+            if (imagenActual && producto.imagen) {
+                imagenActual.textContent = producto.imagen;
+            } else if (imagenActual) {
+                imagenActual.textContent = 'No hay imagen asignada';
             }
-        }, 800);
-    }
-}
-
-function actualizarContadorCarrito() {
-    const contadorCarrito = document.getElementById('carritoContador');
-    if (contadorCarrito) {
-        const totalItems = carrito.reduce((sum, item) => sum + item.cantidad, 0);
-        contadorCarrito.textContent = totalItems;
-        
-        // Animación del contador
-        contadorCarrito.style.animation = 'none';
-        setTimeout(() => {
-            contadorCarrito.style.animation = 'pulse 0.5s ease-in-out';
-        }, 10);
-    }
-}
-// SISTEMA DE NOTIFICACIONES
-function mostrarNotificacion(mensaje, tipo = 'info') {
-    const iconos = {
-        success: 'bi-check-circle-fill',
-        error: 'bi-x-circle-fill',
-        warning: 'bi-exclamation-triangle-fill',
-        info: 'bi-info-circle-fill'
-    };
-
-    const colores = {
-        success: '#28a745',
-        error: '#dc3545',
-        warning: '#ffc107',
-        info: '#17a2b8'
-    };
-
-    // Crear elemento de notificación
-    const notificacion = document.createElement('div');
-    notificacion.className = 'notificacion-custom';
-    notificacion.innerHTML = `
-        <i class="bi ${iconos[tipo]}"></i>
-        <span>${mensaje}</span>
-    `;
-    
-    notificacion.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: linear-gradient(135deg, ${colores[tipo]}, ${adjustColor(colores[tipo], -20)});
-        color: white;
-        padding: 15px 25px;
-        border-radius: 50px;
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-        z-index: 9999;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        font-weight: 600;
-        animation: slideInRight 0.4s ease-out;
-        max-width: 350px;
-    `;
-
-    document.body.appendChild(notificacion);
-
-    // Eliminar después de 3 segundos
-    setTimeout(() => {
-        notificacion.style.animation = 'slideOutRight 0.4s ease-out';
-        setTimeout(() => {
-            notificacion.remove();
-        }, 400);
-    }, 3000);
-}
-
-// Función auxiliar para ajustar color
-function adjustColor(color, amount) {
-    const clamp = (val) => Math.min(Math.max(val, 0), 255);
-    const num = parseInt(color.replace('#', ''), 16);
-    const r = clamp((num >> 16) + amount);
-    const g = clamp(((num >> 8) & 0x00FF) + amount);
-    const b = clamp((num & 0x0000FF) + amount);
-    return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, '0')}`;
-}
-// ANIMACIONES ADICIONALES
-// Animación de scroll suave
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            target.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
+            
+            // Mostrar previsualización de la imagen (opcional)
+            const imagenPreview = document.getElementById('imagen_preview');
+            if (imagenPreview && producto.imagen) {
+                imagenPreview.src = base_url + producto.imagen; // Asegúrate de que base_url sea correcto
+                imagenPreview.style.display = 'block';
+            } else if (imagenPreview) {
+                imagenPreview.style.display = 'none';
+            }
+            document.getElementById("frm_edit_produc").dataset.edit = "true";
+        } else {
+            console.error("Producto no encontrado:", id);
+            Swal.fire({
+                title: "Error",
+                text: "Producto no encontrado.",
+                icon: "error"
             });
         }
-    });
-});
-
-// Intersection Observer para animaciones al hacer scroll
-const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
-};
-
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateY(0)';
-        }
-    });
-}, observerOptions);
-
-// Observar tarjetas de productos
-document.querySelectorAll('.producto-card').forEach(card => {
-    observer.observe(card);
-});
-// EFECTOS DE HOVER MEJORADOS
-document.querySelectorAll('.producto-card, .card-destacado').forEach(card => {
-    card.addEventListener('mouseenter', function() {
-        this.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
-    });
-});
-// AGREGAR ESTILOS DE ANIMACIÓN AL DOM
-const styleSheet = document.createElement('style');
-styleSheet.textContent = `
-    @keyframes slideInRight {
-        from {
-            transform: translateX(400px);
-            opacity: 0;
-        }
-        to {
-            transform: translateX(0);
-            opacity: 1;
-        }
+    } catch (e) {
+        console.error("Error al obtener producto por ID", e);
+        Swal.fire({
+            title: "Error",
+            text: "No se pudo cargar el producto.",
+            icon: "error"
+        });
     }
+}
 
-    @keyframes slideOutRight {
-        from {
-            transform: translateX(0);
-            opacity: 1;
+async function view_productos() {
+    try {
+        let respuesta = await fetch(base_url + 'control/ProductoController.php?tipo=ver_productos', {
+            method: 'POST',
+            mode: 'cors',
+            cache: 'no-cache',
+        });
+
+        let json = await respuesta.json();
+        console.log("Productos recibidos:", json); // Agrega esto para depurar
+        let content_productos = document.getElementById('content_productos');
+        if (content_productos) {
+            content_productos.innerHTML = '';
+            json.forEach((producto, index) => {
+                let fila = document.createElement('tr');
+                fila.classList.add('text-center');
+                fila.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${producto.codigo || ''}</td>
+                    <td>${producto.nombre || ''}</td>
+                    <td>${producto.detalle || ''}</td>
+                    <td>${producto.precio || ''}</td>
+                    <td>${producto.stock || ''}</td>
+                    <td>${producto.fecha_vencimiento || ''}</td>
+                    <td>${producto.categoria || ''}</td>
+                    <td>${producto.proveedor || 'Sin proveedor'}</td>
+                    <td>
+                    <a href="${base_url}edit-producto/${producto.id}" class="btn btn-outline-primary">
+                     <i class="bi bi-pencil-square"></i>
+                    </a>
+                    <a href="javascript:void(0)" onclick="eliminarProducto(${producto.id})" class="btn btn-outline-danger">
+                     <i class="bi bi-trash3"></i>
+                    </a>
+                    </td>
+                    `;
+                content_productos.appendChild(fila);
+            });
         }
-        to {
-            transform: translateX(400px);
-            opacity: 0;
-        }
+    } catch (e) {
+        console.error("Error al ver productos:", e);
     }
+}
 
-    @keyframes pulse {
-        0%, 100% {
-            transform: scale(1);
-        }
-        50% {
-            transform: scale(1.2);
-        }
-    }
-`;
-document.head.appendChild(styleSheet);
+if (document.getElementById('content_productos')) {
+    view_productos();
+}
 
-// ============================================
-// INICIALIZACIÓN
-// ============================================
-
-document.addEventListener('DOMContentLoaded', function() {
-    // Actualizar contador del carrito al cargar
-    actualizarContadorCarrito();
-
-    // Inicializar tooltips de Bootstrap si existen
-    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-    tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl);
+if (document.getElementById('btn_guardar')) {
+    document.getElementById('btn_guardar').addEventListener('click', function () {
+        validar_form();
     });
+}
 
-    console.log('Vista de productos cargada correctamente');
-    console.log('Productos en carrito:', carrito.length);
-});
-// MANEJO DE ERRORES DE IMÁGENES
-document.querySelectorAll('img').forEach(img => {
-    img.addEventListener('error', function() {
-        this.src = `${base_url}assets/img/no-image.png`;
-        this.style.opacity = '0.5';
+async function eliminarProducto(id) {
+    Swal.fire({
+        title: "¿Estás seguro?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Sí, eliminar",
+        cancelButtonText: "Cancelar"
+    }).then(async (result) => {
+        if (result.isConfirmed) {
+            try {
+                let respuesta = await fetch(base_url + 'control/ProductoController.php?tipo=eliminar_producto&id=' + id, {
+                    method: 'POST',
+                    mode: 'cors',
+                    cache: 'no-cache'
+                });
+                
+                let json = await respuesta.json();
+                if (json.status) {
+                    Swal.fire("Eliminado!", json.msg, "success");
+                    view_productos();
+                } else {
+                    Swal.fire("Error!", json.msg, "error");
+                }
+            } catch (e) {
+                console.error("Error al eliminar producto:", e);
+                Swal.fire("Error!", "Ocurrió un error al eliminar el producto.", "error");
+            }
+        }
     });
-});
-// PREVENIR ZOOM EN MOBILE AL HACER DOBLE CLICK
-let lastTouchEnd = 0;
-document.addEventListener('touchend', function (event) {
-    const now = (new Date()).getTime();
-    if (now - lastTouchEnd <= 300) {
-        event.preventDefault();
-    }
-    lastTouchEnd = now;
-}, false);
+}
+// cargar categoria 
+async function cargarCategorias() {
+  let r = await fetch(base_url + 'control/CategoriaController.php?tipo=ver_categorias');
+  let j = await r.json();
+  let h = '<option value="">Seleccione una categoría</option>';
+  j.data.forEach(c => h += `<option value="${c.id}">${c.nombre}</option>`);
+  document.getElementById("id_categoria").innerHTML = h;
+}
+
+// cargar proveedor
+async function cargarProveedores() {
+  let r = await fetch(base_url + 'control/UsuarioController.php?tipo=ver_proveedores');
+  let j = await r.json();
+  let h = '<option value="">Seleccione un proveedor</option>';
+  j.data.forEach(p => h += `<option value="${p.id}">${p.razon_social}</option>`);
+  document.getElementById("id_persona").innerHTML = h;
+}
