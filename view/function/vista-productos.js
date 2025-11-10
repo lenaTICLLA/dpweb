@@ -87,3 +87,5 @@ function mostrarToast(msg){
     if(!t){t=document.createElement('div'); t.id='small-toast'; t.style.cssText='position:fixed;bottom:20px;right:20px;padding:10px 14px;background:rgba(0,0,0,0.7);color:#fff;border-radius:10px;z-index:9999;'; document.body.appendChild(t);}
     t.textContent=msg; t.style.opacity='1'; setTimeout(()=>{t.style.opacity='0';},1800);
 }
+
+
