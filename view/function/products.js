@@ -191,7 +191,7 @@ async function obtenerProductoPorId(id) {
                 imagenActual.textContent = producto.imagen;
             } else if (imagenActual) {
                 imagenActual.textContent = 'No hay imagen asignada';
-            }
+            }       
             
             // Mostrar previsualización de la imagen (opcional)
             const imagenPreview = document.getElementById('imagen_preview');
@@ -322,3 +322,22 @@ async function cargarProveedores() {
   j.data.forEach(p => h += `<option value="${p.id}">${p.razon_social}</option>`);
   document.getElementById("id_persona").innerHTML = h;
 }
+
+document.getElementById('imagen').addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    const imagenActual = document.getElementById('imagen_actual');
+    const imagenPreview = document.getElementById('imagen_preview');
+
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            imagenPreview.src = e.target.result;
+            imagenPreview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+        imagenActual.textContent = file.name;
+    } else {
+        imagenPreview.style.display = 'none';
+        imagenActual.textContent = 'No hay imagen seleccionada';
+    }
+});

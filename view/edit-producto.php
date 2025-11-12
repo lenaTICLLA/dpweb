@@ -1,5 +1,5 @@
 <!-- INICIO DE CUERPO DE PAGINA -->
-    <div class="container-fluid mt-4">
+<div class="container-fluid mb-0" style="position: relative; top: -80px;">
     <div class="card">
         <h5 class="card-header">Actualizar Producto</h5>
         <form id="frm_edit_produc">
@@ -42,17 +42,16 @@
                         <input type="date" class="form-control" id="fecha_vencimiento" name="fecha_vencimiento" required>
                     </div>
                 </div>
-                <div class="mb-3 row align-items-center">
+                <div class="mb-3 row">
                     <label for="imagen" class="col-sm-4 col-form-label">Imagen:</label>
-  <div class="col-sm-8">
-    <div class="image-box-rect">
-      <input type="file" name="imagen" id="imagen" accept="image/*" class="form-control form-control-sm">
-      <img id="preview_product_img" src="uploads/default.png" alt="Vista previa del producto">
-    </div>
-    <input type="hidden" id="imagen_actual" name="imagen_actual">
-  </div>
-</div>
-
+                    <div class="col-sm-8">
+                        <input type="file" class="form-control" id="imagen" name="imagen" accept="image/*">
+                    <!-- Mostrar la URL de la imagen existente -->
+                        <span id="imagen_actual" class="form-text" style="display: block;">No hay imagen asignada</span>
+                        <!-- Previsualización de la imagen existente -->
+                        <img id="imagen_preview" src="" alt="Previsualización de la imagen" style="max-width: 200px; display: none; margin-top: 10px;">
+                    </div>
+                </div>
                 <div class="mb-3 row">
                     <label for="id_categoria" class="col-sm-4 col-form-label">Categoría:</label>
                     <div class="col-sm-8">
@@ -62,17 +61,17 @@
                         </select>
                     </div>
                 </div>
-                <div class="mb-3 row">
+                  <div class="mb-3 row">
                     <label for="id_persona" class="col-sm-4 col-form-label">Proveedor:</label>
                     <div class="col-sm-8">
                         <select class="form-control" id="id_persona" name="id_persona" required>
                             <option value="">Seleccionar Proveedor</option>
-                        
+                         
                         </select>
                     </div>
                 </div>
+
                 <div class="d-flex justify-content-end gap-2">
-                    <input type="hidden" name="imagen_actual" id="imagen_actual" value="">
                     <button type="button" class="btn btn-primary" id="btn_guardar">Actualizar</button>
                     <a href="<?= BASE_URL ?>produc" type="button" class="btn btn-danger">Cancelar</a>
                 </div>

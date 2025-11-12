@@ -1,5 +1,5 @@
 <!-- INICIO DE CUERPO DE PAGINA -->
-    <div class="container-fluid">
+    <div class="container-fluid mb-0" style="position: relative; top: -80px;">
         <div class="card">
             <h5 class="card-header">Registro de Usuario</h5>
             <form id="frm_edit_proveedor" action="" method="">
