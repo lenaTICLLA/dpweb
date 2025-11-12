@@ -49,9 +49,10 @@ class ProductoModel
    public function verProductos()
 {
     $arr_productos = array();
-    $consulta = "SELECT p.*, c.nombre AS categoria 
+    $consulta = "SELECT p.*, c.nombre AS categoria, per.razon_social AS proveedor 
                  FROM producto p 
-                 LEFT JOIN categoria c ON p.id_categoria = c.id";
+                 LEFT JOIN categoria c ON p.id_categoria = c.id
+                 LEFT JOIN persona per ON p.id_proveedor = per.id";
     $sql = $this->conexion->query($consulta);
     while ($objeto = $sql->fetch_object()) {
         array_push($arr_productos, $objeto);
@@ -97,7 +98,7 @@ class ProductoModel
     $id_categoria = $data['id_categoria'] ? $data['id_categoria'] : NULL;
     $id_proveedor = $data['id_proveedor'] ? (int)$data['id_proveedor'] : NULL; // Manejar id_proveedor
     $stmt->bind_param(
-        "ssssdssiii", // Cambiado de "ssssdssi" a "ssssdssii" para incluir el tipo de id_producto
+        "sssddssiii", // Cambiado de "ssssdssi" a "ssssdssii" para incluir el tipo de id_producto
         $data['codigo'],
         $data['nombre'],
         $data['detalle'],

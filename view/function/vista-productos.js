@@ -1,91 +1,98 @@
-document.addEventListener('DOMContentLoaded', ()=>{cargarProductos();});
+document.addEventListener('DOMContentLoaded', function() {
+    cargarProductos();
+});
 
-async function cargarProductos(){
-    try{
-        const url = base_url+'control/ProductoController.php?tipo=ver_productos';
-        const resp = await fetch(url, { method: 'GET', headers: { 'Accept': 'application/json' } });
-        if(!resp.ok) throw new Error(resp.status);
-        const json = await resp.json();
-        const productos = Array.isArray(json)?json:(json.data && Array.isArray(json.data)?json.data:[]);
-        cargarCarousel(productos.slice(0,3));
-        renderProductos(productos);
-    }catch(e){
-        console.error(e);
-        document.getElementById('productos-container').innerHTML='<div class="col-12 text-center text-danger">Error al cargar productos.</div>';
-    }
-}
+async function cargarProductos() {
+    try {
+        let respuesta = await fetch(base_url + 'control/ProductoController.php?tipo=ver_productos', {
+            method: 'POST',
+            mode: 'cors',
+            cache: 'no-cache',
+        });
 
-function renderProductos(productos){
-    const container = document.getElementById('productos-container');
-    if(!productos || productos.length===0){container.innerHTML='<div class="col-12 text-center">No hay productos disponibles.</div>'; return;}
-    container.innerHTML='';
-    productos.forEach(p=>{
-        const id = p.id??p.producto_id??'';
-        const nombre = p.nombre??'Sin nombre';
-        const cat = p.categoria??'Sin categoría';
-        const precio = Number(p.precio??0).toFixed(2);
-        const img = p.imagen?base_url+p.imagen:'https://via.placeholder.com/300x250?text=Sin+Imagen';
-        const col = document.createElement('div'); col.className='col-xl-3 col-lg-4 col-md-6 col-sm-6';
-        col.innerHTML=`
-            <div class="producto-card" data-id="${id}">
-                <img src="${img}" alt="${nombre}" onerror="this.src='https://via.placeholder.com/300x250?text=Imagen+No+Disponible'">
-                <div class="producto-info">
-                    <div class="producto-nombre">${nombre}</div>
-                    <div class="producto-categoria">${cat}</div>
-                    <div class="producto-precio">S/ ${precio}</div>
-                    <div class="botones">
-                        <button class="btn-ver-detalles btn btn-sm" data-id="${id}"><i class="bi bi-eye"></i> Ver</button>
-                        <button class="btn-anadir-carrito btn btn-sm" data-id="${id}"><i class="bi bi-cart-plus"></i> Añadir</button>
+        let json = await respuesta.json();
+        console.log("Productos recibidos:", json);
+
+        // Cargar carousel de productos destacados (primeros 3 productos)
+        cargarCarousel(json.slice(0, 3));
+
+        let container = document.getElementById('productos-container');
+        if (container) {
+            container.innerHTML = '';
+
+            if (json.length === 0) {
+                container.innerHTML = '<div class="col-12"><p class="text-center">No hay productos disponibles.</p></div>';
+                return;
+            }
+
+            json.forEach(producto => {
+                let imagenSrc = producto.imagen ? base_url + producto.imagen : 'https://via.placeholder.com/300x200?text=Sin+Imagen';
+
+                let card = document.createElement('div');
+                card.className = 'col-lg-3 col-md-4 col-sm-6';
+                card.innerHTML = `
+                    <div class="producto-card">
+                        <img src="${imagenSrc}" alt="${producto.nombre}" class="producto-imagen" onerror="this.src='https://via.placeholder.com/300x200?text=Imagen+No+Disponible'">
+                        <div class="producto-info">
+                            <div class="producto-nombre">${producto.nombre}</div>
+                            <div class="producto-categoria">Categoría: ${producto.categoria || 'Sin categoría'}</div>
+                            <div class="producto-precio">Precio: S/ ${parseFloat(producto.precio).toFixed(2)}</div>
+                            <div class="botones">
+                                <button class="btn-ver-detalles"><i class="bi bi-info-circle"></i>Ver Detalles</button>
+                                <button class="btn-anadir-carrito"><i class="bi bi-cart4"></i>Añadir a Carrito</button>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>`;
-        container.appendChild(col);
-    });
-
-    container.onclick = e=>{
-        const ver = e.target.closest('.btn-ver-detalles');
-        const add = e.target.closest('.btn-anadir-carrito');
-        if(ver){verDetalles(ver.dataset.id);}
-        if(add){añadirAlCarrito(add.dataset.id);}
-    };
-}
-
-function cargarCarousel(productos){
-    const inner = document.querySelector('#productos-carousel .carousel-inner');
-    const indicators = document.querySelector('#productos-carousel .carousel-indicators');
-    if(!inner || !indicators) return;
-    inner.innerHTML=''; indicators.innerHTML='';
-    if(!productos || productos.length===0){
-        inner.innerHTML=`<div class="carousel-item active"><img src="https://via.placeholder.com/800x400?text=Sin+Productos" class="d-block w-100"></div>`;
-        return;
+                `;
+                container.appendChild(card);
+            });
+        }
+    } catch (e) {
+        console.error("Error al cargar productos:", e);
+        let container = document.getElementById('productos-container');
+        if (container) {
+            container.innerHTML = '<div class="col-12"><p class="text-center text-danger">Error al cargar los productos.</p></div>';
+        }
     }
-    productos.forEach((p,i)=>{
-        const id=p.id??p.producto_id??i;
-        const nombre=p.nombre??'Sin nombre';
-        const cat=p.categoria??'Sin categoría';
-        const precio=Number(p.precio??0).toFixed(2);
-        const img=p.imagen?base_url+p.imagen:'https://via.placeholder.com/800x400?text=Sin+Imagen';
+}
 
-        const ind = document.createElement('button');
-        ind.type='button'; ind.setAttribute('data-bs-target','#productos-carousel');
-        ind.setAttribute('data-bs-slide-to',i); ind.setAttribute('aria-label',`Slide ${i+1}`);
-        if(i===0){ind.className='active'; ind.setAttribute('aria-current','true');}
-        indicators.appendChild(ind);
+function cargarCarousel(productos) {
+    let carouselInner = document.querySelector('#productos-carousel .carousel-inner');
+    let carouselIndicators = document.querySelector('#productos-carousel .carousel-indicators');
+    if (!carouselInner || !carouselIndicators || productos.length === 0) return;
 
-        const item = document.createElement('div');
-        item.className='carousel-item'+(i===0?' active':'');
-        item.innerHTML=`<img src="${img}" class="d-block w-100" alt="${nombre}">`;
-        inner.appendChild(item);
+    carouselInner.innerHTML = '';
+    carouselIndicators.innerHTML = '';
+
+    // Crear items del carousel (mostrar 1 producto por slide)
+    productos.forEach((producto, index) => {
+        // Crear indicador
+        let indicator = document.createElement('button');
+        indicator.type = 'button';
+        indicator.setAttribute('data-bs-target', '#productos-carousel');
+        indicator.setAttribute('data-bs-slide-to', index);
+        indicator.setAttribute('aria-label', `Slide ${index + 1}`);
+        if (index === 0) {
+            indicator.className = 'active';
+            indicator.setAttribute('aria-current', 'true');
+        }
+        carouselIndicators.appendChild(indicator);
+
+        // Crear item del carousel
+        let item = document.createElement('div');
+        item.className = `carousel-item ${index === 0 ? 'active' : ''}`;
+
+        let imagenSrc = producto.imagen ? base_url + producto.imagen : 'https://via.placeholder.com/800x400?text=Sin+Imagen';
+
+        item.innerHTML = `
+            <img src="${imagenSrc}" class="d-block w-100 producto-imagen-carousel-full" alt="${producto.nombre}" onerror="this.src='https://via.placeholder.com/800x400?text=Imagen+No+Disponible'">
+            <div class="carousel-caption d-none d-md-block producto-info-carousel-full">
+                <h5 class="producto-nombre-carousel-full">${producto.nombre}</h5>
+                <p class="producto-categoria-carousel-full">Categoría: ${producto.categoria || 'Sin categoría'}</p>
+                <p class="producto-precio-carousel-full">Precio: S/ ${parseFloat(producto.precio).toFixed(2)}</p>
+            </div>
+        `;
+
+        carouselInner.appendChild(item);
     });
 }
-
-/* Funciones placeholder */
-function verDetalles(id){ if(!id) return alert('ID no encontrado'); window.location.href=base_url+'producto/'+id; }
-function añadirAlCarrito(id){ if(!id) return alert('ID no encontrado'); console.log('Añadir al carrito',id); mostrarToast('Producto añadido al carrito');}
-function mostrarToast(msg){
-    let t=document.getElementById('small-toast');
-    if(!t){t=document.createElement('div'); t.id='small-toast'; t.style.cssText='position:fixed;bottom:20px;right:20px;padding:10px 14px;background:rgba(0,0,0,0.7);color:#fff;border-radius:10px;z-index:9999;'; document.body.appendChild(t);}
-    t.textContent=msg; t.style.opacity='1'; setTimeout(()=>{t.style.opacity='0';},1800);
-}
-
-
