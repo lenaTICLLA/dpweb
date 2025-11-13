@@ -246,6 +246,7 @@ async function view_productos() {
                     <td>${producto.fecha_vencimiento || ''}</td>
                     <td>${producto.categoria || ''}</td>
                     <td>${producto.proveedor || 'Sin proveedor'}</td>
+                    <td><svg id="barcode${producto.id}"></svg></td>
                     <td>
                     <a href="${base_url}edit-producto/${producto.id}" class="btn btn-outline-primary">
                      <i class="bi bi-pencil-square"></i>
@@ -256,6 +257,18 @@ async function view_productos() {
                     </td>
                     `;
                 content_productos.appendChild(fila);
+                JsBarcode("#barcode" + producto.id, "" + producto.codigo, {
+                lineColor: "rgba(131, 45, 112, 1)",
+                width: 2,
+                height: 25,
+            });
+                /*JsBarcode("#barcode"+producto.id, ""+producto.codigo, {
+                format: "pharmacode",
+                lineColor: "pink    ",
+                width: 4,
+                height: 40,
+                displayValue: false
+            });*/
             });
         }
     } catch (e) {
