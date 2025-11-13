@@ -19,6 +19,7 @@
             <th>Fecha Vencimiento</th>
             <th>categoria</th>
             <th>Proveedor</th>
+            <th>Codigo Barra</th>
             <th>Acciones</th>
         </tr>
     </thead>
@@ -28,6 +29,8 @@
 </table>
 </div>
 <script src="<?= BASE_URL ?>view/function/products.js"></script>
+<script src="<?= BASE_URL ?>view/function/JsBarcode.all.min.js"></script>
+
 <!--script>view_users();</script-->
 <style>
 
