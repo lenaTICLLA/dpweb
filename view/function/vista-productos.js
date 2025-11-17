@@ -4,14 +4,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
 async function cargarProductos() {
     try {
-        let respuesta = await fetch(base_url + 'control/ProductoController.php?tipo=ver_productos', {
+        let respuesta = await fetch(base_url + 'control/ProductoController.php?tipo=buscar_Producto_venta', {
             method: 'POST',
             mode: 'cors',
             cache: 'no-cache',
         });
 
-        let json = await respuesta.json();
+        let res  = await respuesta.json();
+        let json = res.data;
         console.log("Productos recibidos:", json);
+
 
         // Cargar carousel de productos destacados (primeros 3 productos)
         cargarCarousel(json.slice(0, 3));
