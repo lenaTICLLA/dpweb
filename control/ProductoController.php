@@ -235,3 +235,23 @@ if ($tipo == "eliminar_producto") {
     $result = $objProducto->eliminarProducto($id);
     echo json_encode($result);
 }
+// buscar producto
+if ($tipo == "buscar_Producto_venta") {
+    $dato = $_POST['dato'] ?? '';
+
+    $productos = $objProducto->buscarProductoByNombreOrCodigo($dato);
+
+    if (count($productos) > 0) {
+        $respuesta = array( 'status' => true,  'msg'    => '','data'   => $productos   // Ya viene con categoría incluida
+        );
+    } else {
+        $respuesta = array(
+            'status' => false,
+            'msg'    => 'No se encontraron productos'
+        );
+    }
+
+    header('Content-Type: application/json');
+    echo json_encode($respuesta);
+    exit;
+}

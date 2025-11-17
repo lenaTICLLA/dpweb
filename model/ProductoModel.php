@@ -131,4 +131,24 @@ class ProductoModel
         $stmt->close();
         return ["status" => $resultado, "msg" => $resultado ? "Producto eliminado correctamente" : "Error al eliminar el producto"];
     }
+
+
+public function buscarProductoByNombreOrCodigo($dato) {
+    $arr_productos = array();
+    
+    // Preparar el patrón de búsqueda
+    $like = "%" . $dato . "%";
+    
+    $stmt = $this->conexion->prepare(" SELECT p.*, c.nombre AS categoria FROM producto p LEFT JOIN categoria c ON p.id_categoria = c.id  WHERE p.codigo LIKE ?  OR p.nombre LIKE ? OR p.detalle LIKE ? ");
+    $stmt->bind_param("sss", $like, $like, $like);
+    $stmt->execute();
+    $resultado = $stmt->get_result();
+    
+    while ($fila = $resultado->fetch_object()) {
+        $arr_productos[] = $fila;
+    }
+    
+    $stmt->close();
+    return $arr_productos;
+}
 }
