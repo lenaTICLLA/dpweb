@@ -1,100 +1,143 @@
 document.addEventListener('DOMContentLoaded', function() {
     cargarProductos();
+
+    let inputBusqueda = document.getElementById('busqueda_venta');
+    if (inputBusqueda) {
+        inputBusqueda.addEventListener('keyup', function () {
+            let dato = this.value.trim();
+            buscarProductos(dato);
+        });
+    }
 });
 
 async function cargarProductos() {
     try {
         let respuesta = await fetch(base_url + 'control/ProductoController.php?tipo=buscar_Producto_venta', {
-            method: 'POST',
-            mode: 'cors',
-            cache: 'no-cache',
+            method: 'POST'
         });
 
-        let res  = await respuesta.json();
-        let json = res.data;
-        console.log("Productos recibidos:", json);
+        let res = await respuesta.json();
+        let productos = res.data || [];
 
+        console.log("Productos iniciales:", productos);
 
-        // Cargar carousel de productos destacados (primeros 3 productos)
-        cargarCarousel(json.slice(0, 3));
+        // Carousel solo en carga inicial
+        cargarCarousel(productos.slice(0, 3));
 
-        let container = document.getElementById('productos-container');
-        if (container) {
-            container.innerHTML = '';
+        renderProductos(productos);
 
-            if (json.length === 0) {
-                container.innerHTML = '<div class="col-12"><p class="text-center">No hay productos disponibles.</p></div>';
-                return;
-            }
-
-            json.forEach(producto => {
-                let imagenSrc = producto.imagen ? base_url + producto.imagen : 'https://via.placeholder.com/300x200?text=Sin+Imagen';
-
-                let card = document.createElement('div');
-                card.className = 'col-lg-3 col-md-4 col-sm-6';
-                card.innerHTML = `
-                    <div class="producto-card">
-                        <img src="${imagenSrc}" alt="${producto.nombre}" class="producto-imagen" onerror="this.src='https://via.placeholder.com/300x200?text=Imagen+No+Disponible'">
-                        <div class="producto-info">
-                            <div class="producto-nombre">${producto.nombre}</div>
-                            <div class="producto-categoria">Categoría: ${producto.categoria || 'Sin categoría'}</div>
-                            <div class="producto-precio">Precio: S/ ${parseFloat(producto.precio).toFixed(2)}</div>
-                            <div class="botones">
-                                <button class="btn-ver-detalles"><i class="bi bi-info-circle"></i>Ver Detalles</button>
-                                <button class="btn-anadir-carrito"><i class="bi bi-cart4"></i>Añadir a Carrito</button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-        }
-    } catch (e) {
-        console.error("Error al cargar productos:", e);
-        let container = document.getElementById('productos-container');
-        if (container) {
-            container.innerHTML = '<div class="col-12"><p class="text-center text-danger">Error al cargar los productos.</p></div>';
-        }
+    } catch (error) {
+        console.error("Error al cargar productos:", error);
     }
+}
+
+async function buscarProductos(dato) {
+    try {
+        const formData = new FormData();
+        formData.append("dato", dato);
+
+        let respuesta = await fetch(base_url + 'control/ProductoController.php?tipo=buscar_Producto_venta', {
+            method: 'POST',
+            body: formData
+        });
+
+        let res = await respuesta.json();
+        let productos = res.data || [];
+
+        console.log("Resultados de búsqueda:", productos);
+
+        renderProductos(productos);
+
+    } catch (error) {
+        console.error("Error en búsqueda:", error);
+    }
+}
+function renderProductos(productos) {
+    let container = document.getElementById('productos-container');
+    if (!container) return;
+
+    container.innerHTML = '';
+
+    if (!productos || productos.length === 0) {
+        container.innerHTML = '<p class="text-center">No se encontraron productos.</p>';
+        return;
+    }
+
+    productos.forEach(producto => {
+        let imagenSrc = producto.imagen
+            ? base_url + producto.imagen
+            : 'https://via.placeholder.com/300x200?text=Sin+Imagen';
+
+        let card = document.createElement('div');
+        card.className = "col-lg-3 col-md-4 col-sm-6";
+
+        card.innerHTML = `
+            <div class="producto-card">
+                <img src="${imagenSrc}" class="producto-imagen" alt="${producto.nombre}"
+                     onerror="this.src='https://via.placeholder.com/300x200?text=Imagen+No+Disponible'">
+
+                <div class="producto-info">
+                    <div class="producto-nombre">${producto.nombre}</div>
+                    <div class="producto-categoria">Categoría: ${producto.categoria || "Sin categoría"}</div>
+                    <div class="producto-precio">Precio: S/ ${isFinite(parseFloat(producto.precio)) ? parseFloat(producto.precio).toFixed(2) : '0.00'}</div>
+                    <div class="botones">
+                        <button class="btn-ver-detalles"><i class="bi bi-info-circle"></i>Ver Detalles</button>
+                        <button class="btn-anadir-carrito"><i class="bi bi-cart4"></i>Añadir a Carrito</button>
+                    </div>
+                </div>
+            </div>
+        `;
+        container.appendChild(card);
+    });
 }
 
 function cargarCarousel(productos) {
     let carouselInner = document.querySelector('#productos-carousel .carousel-inner');
     let carouselIndicators = document.querySelector('#productos-carousel .carousel-indicators');
-    if (!carouselInner || !carouselIndicators || productos.length === 0) return;
+
+    if (!carouselInner || !carouselIndicators) return;
 
     carouselInner.innerHTML = '';
     carouselIndicators.innerHTML = '';
 
-    // Crear items del carousel (mostrar 1 producto por slide)
     productos.forEach((producto, index) => {
-        // Crear indicador
+        let imagenSrc = producto.imagen
+            ? base_url + producto.imagen
+            : 'https://via.placeholder.com/800x400?text=Sin+Imagen';
+
+        // Indicadores
         let indicator = document.createElement('button');
-        indicator.type = 'button';
-        indicator.setAttribute('data-bs-target', '#productos-carousel');
-        indicator.setAttribute('data-bs-slide-to', index);
-        indicator.setAttribute('aria-label', `Slide ${index + 1}`);
+        indicator.type = "button";
+        indicator.dataset.bsTarget = "#productos-carousel";
+        indicator.dataset.bsSlideTo = index;
+        indicator.setAttribute("aria-label", `Slide ${index + 1}`);
+
         if (index === 0) {
-            indicator.className = 'active';
-            indicator.setAttribute('aria-current', 'true');
+            indicator.classList.add("active");
+            indicator.setAttribute("aria-current", "true");
         }
+
         carouselIndicators.appendChild(indicator);
 
-        // Crear item del carousel
+        // Slides
         let item = document.createElement('div');
-        item.className = `carousel-item ${index === 0 ? 'active' : ''}`;
-
-        let imagenSrc = producto.imagen ? base_url + producto.imagen : 'https://via.placeholder.com/800x400?text=Sin+Imagen';
+        item.className = `carousel-item ${index === 0 ? "active" : ""}`;
 
         item.innerHTML = `
-            <img src="${imagenSrc}" class="d-block w-100 producto-imagen-carousel-full" alt="${producto.nombre}" onerror="this.src='https://via.placeholder.com/800x400?text=Imagen+No+Disponible'">
+            <img src="${imagenSrc}" class="d-block w-100 producto-imagen-carousel-full"
+                onerror="this.src='https://via.placeholder.com/800x400?text=Imagen+No+Disponible'">
+
             <div class="carousel-caption d-none d-md-block producto-info-carousel-full">
-                <h5 class="producto-nombre-carousel-full">${producto.nombre}</h5>
-                <p class="producto-categoria-carousel-full">Categoría: ${producto.categoria || 'Sin categoría'}</p>
-                <p class="producto-precio-carousel-full">Precio: S/ ${parseFloat(producto.precio).toFixed(2)}</p>
+                <h5>${producto.nombre}</h5>
+                <p>Categoría: ${producto.categoria || "Sin categoría"}</p>
+                <p>Precio: S/ ${parseFloat(producto.precio).toFixed(2)}</p>
             </div>
         `;
 
         carouselInner.appendChild(item);
     });
 }
+
+
+
+

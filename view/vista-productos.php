@@ -35,7 +35,7 @@
 
         <!-- FILTROS -->
         <div class="d-flex gap-3 mb-3 flex-wrap">
-          <input class="form-control col-md-12" placeholder="Buscar productos por nombre..." id="busqueda_venta" onkeyup="view_productos();">
+          <input class="form-control col-md-12" placeholder="Buscar por código, nombre o detalle..." id="busqueda_venta">
         </div>
 
         <!-- CARRUSEL DESTACADOS -->
@@ -124,7 +124,6 @@
 
 <!-- Scripts -->
 <script src="<?php echo BASE_URL; ?>view/function/vista-productos.js"></script>
-<script src="<?php echo BASE_URL; ?>view/function/products.js"></script>
 <script src="<?php echo BASE_URL; ?>view/function/venta.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>

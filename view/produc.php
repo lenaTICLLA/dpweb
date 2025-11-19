@@ -28,8 +28,8 @@
     </tbody>
 </table>
 </div>
-<script src="<?= BASE_URL ?>view/function/products.js"></script>
 <script src="<?= BASE_URL ?>view/function/JsBarcode.all.min.js"></script>
+<script src="<?= BASE_URL ?>view/function/products.js"></script>
 
 <!--script>view_users();</script-->
 <style>
