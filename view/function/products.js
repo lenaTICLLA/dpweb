@@ -222,64 +222,77 @@ async function obtenerProductoPorId(id) {
 
 async function view_productos() {
     try {
-        let dato = document.getElementById('busqueda_venta').value;
+        let dato = ""; // sin búsqueda, lista todo
         const datos = new FormData();
-        datos.append('datos', dato);
-        let respuesta = await fetch(base_url + 'control/ProductoController.php?tipo=ver_productos', {
+        datos.append("dato", dato); // ← NOMBRE CORRECTO
+
+        let respuesta = await fetch(base_url + 'control/ProductoController.php?tipo=buscar_Producto_venta', {
             method: 'POST',
             mode: 'cors',
             cache: 'no-cache',
             body: datos
         });
 
-        let json = await respuesta.json();
-        console.log("Productos recibidos:", json); // Agrega esto para depurar
-        let content_productos = document.getElementById('content_productos');
-        if (content_productos) {
-            content_productos.innerHTML = '';
-            contenidot.innerHTML =``;
-            json.forEach((producto, index) => {
-                let fila = document.createElement('tr');
-                fila.classList.add('text-center');
-                fila.innerHTML = `
-                    <td>${index + 1}</td>
-                    <td>${producto.codigo || ''}</td>
-                    <td>${producto.nombre || ''}</td>
-                    <td>${producto.detalle || ''}</td>
-                    <td>${producto.precio || ''}</td>
-                    <td>${producto.stock || ''}</td>
-                    <td>${producto.fecha_vencimiento || ''}</td>
-                    <td>${producto.categoria || ''}</td>
-                    <td>${producto.proveedor || 'Sin proveedor'}</td>
-                    <td><svg id="barcode${producto.id}"></svg></td>
-                    <td>
-                    <a href="${base_url}edit-producto/${producto.id}" class="btn btn-outline-primary">
-                     <i class="bi bi-pencil-square"></i>
-                    </a>
-                    <a href="javascript:void(0)" onclick="eliminarProducto(${producto.id})" class="btn btn-outline-danger">
-                     <i class="bi bi-trash3"></i>
-                    </a>
-                    </td>
-                    `;
-                content_productos.appendChild(fila);
-                JsBarcode("#barcode" + producto.id, "" + producto.codigo, {
-                lineColor: "rgba(131, 45, 112, 1)",
-                width: 2,
-                height: 25,
-            });
-                /*JsBarcode("#barcode"+producto.id, ""+producto.codigo, {
-                format: "pharmacode",
-                lineColor: "pink    ",
-                width: 4,
-                height: 40,
-                displayValue: false
-            });*/
-            });
+        let res = await respuesta.json();
+        console.log("Productos recibidos:", res);
+
+        // validar que venga un array
+        let productos = (res && res.status && Array.isArray(res.data)) ? res.data : [];
+
+        let content = document.getElementById('content_productos');
+        if (!content) return;
+
+        content.innerHTML = "";
+
+        if (productos.length === 0) {
+            content.innerHTML = `<tr><td colspan="11" class="text-center">No hay productos.</td></tr>`;
+            return;
         }
+
+        productos.forEach((p, i) => {
+            let fila = document.createElement('tr');
+            fila.classList.add('text-center');
+            fila.innerHTML = `
+                <td>${i + 1}</td>
+                <td>${p.codigo ?? ""}</td>
+                <td>${p.nombre ?? ""}</td>
+                <td>${p.detalle ?? ""}</td>
+                <td>${p.precio ?? ""}</td>
+                <td>${p.stock ?? ""}</td>
+                <td>${p.fecha_vencimiento ?? ""}</td>
+                <td>${p.categoria ?? ""}</td>
+                <td>${p.proveedor ?? "Sin proveedor"}</td>
+                <td><svg id="barcode${p.id}"></svg></td>
+                <td>
+                    <a href="${base_url}edit-producto/${p.id}" class="btn btn-outline-primary">
+                        <i class="bi bi-pencil-square"></i>
+                    </a>
+                    <a href="javascript:void(0)" onclick="eliminarProducto(${p.id})" class="btn btn-outline-danger">
+                        <i class="bi bi-trash3"></i>
+                    </a>
+                </td>
+            `;
+            content.appendChild(fila);
+
+            // generar código de barras
+            if (typeof JsBarcode !== "undefined" && p.id && p.codigo) {
+                try {
+                    JsBarcode("#barcode" + p.id, String(p.codigo), {
+                        lineColor: "rgba(131, 45, 112, 1)",
+                        width: 2,
+                        height: 25
+                    });
+                } catch (err) {
+                    console.warn("Error barcode:", err);
+                }
+            }
+        });
+
     } catch (e) {
         console.error("Error al ver productos:", e);
     }
 }
+
 
 if (document.getElementById('content_productos')) {
     view_productos();
@@ -341,21 +354,26 @@ async function cargarProveedores() {
   document.getElementById("id_persona").innerHTML = h;
 }
 
-document.getElementById('imagen').addEventListener('change', function(event) {
-    const file = event.target.files[0];
-    const imagenActual = document.getElementById('imagen_actual');
-    const imagenPreview = document.getElementById('imagen_preview');
+const imagenInput = document.getElementById('imagen');
+if (imagenInput) {
+    imagenInput.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        const imagenActual = document.getElementById('imagen_actual');
+        const imagenPreview = document.getElementById('imagen_preview');
 
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            imagenPreview.src = e.target.result;
-            imagenPreview.style.display = 'block';
-        };
-        reader.readAsDataURL(file);
-        imagenActual.textContent = file.name;
-    } else {
-        imagenPreview.style.display = 'none';
-        imagenActual.textContent = 'No hay imagen seleccionada';
-    }
-});
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                if (imagenPreview) {
+                    imagenPreview.src = e.target.result;
+                    imagenPreview.style.display = 'block';
+                }
+            };
+            reader.readAsDataURL(file);
+            if (imagenActual) imagenActual.textContent = file.name;
+        } else {
+            if (imagenPreview) imagenPreview.style.display = 'none';
+            if (imagenActual) imagenActual.textContent = 'No hay imagen seleccionada';
+        }
+    });
+}
