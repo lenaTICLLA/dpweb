@@ -35,7 +35,10 @@
 
         <!-- FILTROS -->
         <div class="d-flex gap-3 mb-3 flex-wrap">
-          <input class="form-control col-md-12" placeholder="Buscar por código, nombre o detalle..." id="busqueda_venta">
+          <input class="form-control col-md-12" placeholder="Buscar por código, nombre o detalle..." id="busqueda_venta" onkeyup="listar_productos_venta();">
+          <input type="hidden" id="id_producto_venta">
+          <input type="hidden" id="producto_precio_venta">
+          <input type="hidden" id="producto_cantidad_venta" value="1">
         </div>
 
         <!-- CARRUSEL DESTACADOS -->
@@ -126,5 +129,13 @@
 <script src="<?php echo BASE_URL; ?>view/function/vista-productos.js"></script>
 <script src="<?php echo BASE_URL; ?>view/function/venta.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  let input = document.getElementById("busqueda_venta");
+  input.addEventListener('keydown', (event)=>{
+    if (event.key == 'Enter') {
+      agregar_producto_temporal();
+    }
+  })
+</script>
 </body>
 </html>

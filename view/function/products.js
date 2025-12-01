@@ -309,8 +309,8 @@ async function eliminarProducto(id) {
         title: "¿Estás seguro?",
         icon: "warning",
         showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
+        confirmButtonColor: "#e9a9e9ff",
+        cancelButtonColor: "rgba(163, 53, 121, 1)",
         confirmButtonText: "Sí, eliminar",
         cancelButtonText: "Cancelar"
     }).then(async (result) => {
