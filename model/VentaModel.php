@@ -27,6 +27,13 @@ class VentaModel
         return $sql;
     }
 
+    public function actualizarCantidadTemporalByid($id, $cantidad){
+        $consulta = "UPDATE temporal_venta SET cantidad = '$cantidad' WHERE id='$id'";
+        $sql = $this->conexion->query($consulta);
+        return $sql;
+    }
+
+
     //buscar todo
     public function buscarTemporales() {
         $arr_temporal = array();
@@ -41,7 +48,8 @@ class VentaModel
     //buscar por id
     public function buscarTemporal($id_producto)
     {
-        $consulta = "SELECT * FROM temporal_venta WHERE id_producto='$id_producto'";
+        $consulta = "SELECT  t.*,
+        p.nombre FROM temporal_venta tv INNER JOIN producto p ON tv. id_producto = p.id";
         $sql = $this->conexion->query($consulta);
         return $sql->fetch_object();
     }

@@ -43,4 +43,51 @@ async function agregar_producto_temporal(){
     } catch (error){
 console.log("error en agregar producto temporal " + error);
 }
+
+async function listar_temporales() {
+     try {
+        let respuesta = await fetch(base_url + 'control/VentaController.php?tipo=listar_venta_temporal', {
+            method: 'POST',
+            mode: 'cors',
+            cache: 'no-cache'
+         
+        });
+        json = await respuesta.json();
+        if (json.status) {
+          json.data.forEach(t_venta => {
+            lista_temporal +=`<tr>
+                    <td><input type="number" id="cant_${t_venta.id}" values="${t_venta.nombre}" style="width: 60px;" onkeyup="actualizar_subtotal(${t_venta.id});" onchange="actualizar_subtotal(${t_venta.id}), ${t_venta.precio} ;"></td>
+                    <td>s/. ${t_venta.venta.precio}</td>
+                    <td> id="subtotal_${venta.cantidad*t_venta.precio}</td>
+                    <td><button class="btn btn-danger btn-sm">Eliminar</input</td>
+                  </tr>`
+          });
+        document.getElementById('lista_compra').innerHTML = lista_temporal;
+        }
+    } catch (error) {
+        console.log("error al cargar productos temporales " + error);
+    }
+}
+}
+
+async function actualizar_subtotal(id, precio) {
+    let cantidad = document.getElementById('cant_'+ id).value;
+    try {
+    const datos = new FormData();
+    datos.append('id', id);
+    datos.append('cantidad', cantidad);
+        let respuesta = await fetch(base_url + 'control/VentaController.php?tipo=actualizar_cantidad', {
+            method: 'POST',
+            mode: 'cors',
+            cache: 'no-cache',
+            body: datos
+        });
+        json = await respuesta.json();
+        if (json.status) {
+            sudtotal = cantidad*precio;
+            document.getElementById('subtotal_'+id).innerHTML = 'S/.'+subtotal;
+        }
+    } catch (error) {
+        console.log("error al actualizar catidad : " + error);
+    }
 }

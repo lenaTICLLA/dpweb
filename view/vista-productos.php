@@ -136,6 +136,7 @@
       agregar_producto_temporal();
     }
   })
+  listar_temporales();
 </script>
 </body>
 </html>
