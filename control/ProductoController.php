@@ -194,9 +194,20 @@ if ($tipo == "actualizar_producto") {
             exit;
         }
 
-        // Opcional: Eliminar la imagen anterior si existe y no es la misma
-        if (!empty($producto['imagen']) && file_exists("../" . $producto['imagen'])) {
-            @unlink("../" . $producto['imagen']);
+        // Eliminar la imagen anterior si existe y se está subiendo una nueva
+        if (!empty($producto['imagen'])) {
+            // Probar ambas rutas posibles (uploads y Uploads)
+            $rutaAnterior1 = "../" . $producto['imagen'];
+            $rutaAnterior2 = "../" . str_replace('uploads/', 'Uploads/', $producto['imagen']);
+            $rutaAnterior3 = "../" . str_replace('Uploads/', 'uploads/', $producto['imagen']);
+            
+            if (file_exists($rutaAnterior1)) {
+                @unlink($rutaAnterior1);
+            } elseif (file_exists($rutaAnterior2)) {
+                @unlink($rutaAnterior2);
+            } elseif (file_exists($rutaAnterior3)) {
+                @unlink($rutaAnterior3);
+            }
         }
     }
 
