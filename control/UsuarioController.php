@@ -1,5 +1,5 @@
 <?php
-
+//siguiente
 // Se incluye el modelo UsuarioModel.php que contiene la lógica de conexión y operaciones con la base de datos
 require_once("../model/UsuarioModel.php");
 
